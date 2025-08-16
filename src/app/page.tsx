@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
       setFilteredSuggestions(suggestions);
       setShowSuggestions(false);
     }
-  }, [searchTerm]);
+  }, [searchTerm, suggestions]);
 
   // Handle click outside to close suggestions
   useEffect(() => {
