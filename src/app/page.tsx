@@ -120,7 +120,7 @@ const HomePage: React.FC = () => {
                   onKeyDown={handleKeyDown}
                   className="w-full h-[50px] pl-4 border-none outline-none text-base text-black"
                 />
-                <button className="flex bg-[#0E7A60] w-[50px] h-[50px] rounded-full items-center justify-center aspect-square">
+                <button className="flex  w-[50px] h-[50px] rounded-full items-center justify-center aspect-square">
                   🔍
                 </button>
               </div>
