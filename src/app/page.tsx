@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image'
 import React, { useState, useRef, useEffect } from 'react';
 
 const HomePage: React.FC = () => {
@@ -82,7 +82,7 @@ const HomePage: React.FC = () => {
         <nav className="w-full border-b border-gray-300 bg-white">
           <div className="max-w-6xl mx-auto w-full">
             <div className="px-4 py-4 flex justify-between items-center">
-              <img src="/logo.svg" alt="Logo" className="h-8" />
+              <Image src="/logo.svg" alt="Logo" className="h-8" width={190} height={50}/>
               <span className="text-gray-700">Entrar</span>
             </div>
           </div>
