@@ -18,6 +18,10 @@
     @apply flex text-left p-4 leading-tight flex-col text-sm gap-2 rounded-md text-white  bg-gray-800 font-semibold
   }
 
+  .btn-services {
+    @apply flex text-[#505561] text-sm px-4 py-2 border border-gray-700 rounded-full cursor-pointer h-fit
+  }
+
 }
 
 @layer utilities {
@@ -62,4 +66,9 @@ body {
   /* IE e Edge antigo */
   scrollbar-width: none;
   /* Firefox */
+}
+
+
+.beautifull-shadow { 
+  box-shadow: 0 4px 12px 0 rgba(55, 64, 81, 0.08);
 }

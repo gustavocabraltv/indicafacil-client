@@ -1,38 +1,43 @@
 'use client';
 import Image from 'next/image'
+import Link from 'next/link'
 import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-// ✅ Constantes fora do componente para manter referência estável
+// 🔗 Catálogo central de rotas sugeridas (nome + url)
+// Edite livremente os hrefs conforme sua IA de rotas.
 const SUGGESTIONS = [
-  "Pintor",
-  "Pedreiro", 
-  "Marido de Aluguel",
-  "Encanador",
-  "Truck Assisted Help Moving",
-  "Help Moving",
-  "Cleaning",
-  "Door, Cabinet, & Furniture Repair"
+  { label: "Pintor", href: "/pintura" },
+  { label: "Pedreiro", href: "/pedreiro" },
+  { label: "Marido de Aluguel", href: "/marido-de-aluguel" },
+  { label: "Encanador", href: "/encanador" },
+  { label: "Truck Assisted Help Moving", href: "/mudanca-truck-assist" },
+  { label: "Help Moving", href: "/mudanca" },
+  { label: "Cleaning", href: "/limpeza" },
+  { label: "Door, Cabinet, & Furniture Repair", href: "/reparo-moveis-portas" },
 ];
 
-const SHORTCUT_BUTTONS = [
-  "Pintor",
-  "Pedreiro", 
-  "Encanador",
-  "Diarista",
-  "Marido de aluguel"
+// ⚡ Atalhos (Mais buscados) com controle de URL independente
+const SHORTCUTS = [
+  { label: "Pintor", href: "/pintura" },
+  { label: "Pedreiro", href: "/pedreiro" },
+  { label: "Encanador", href: "/encanador" },
+  { label: "Diarista", href: "/diarista" },
+  { label: "Marido de aluguel", href: "/marido-de-aluguel" },
 ];
 
 const HomePage: React.FC = () => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>(SUGGESTIONS);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<typeof SUGGESTIONS>(SUGGESTIONS);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   // Filtra sugestões com base no termo
   useEffect(() => {
     if (searchTerm.trim()) {
       const filtered = SUGGESTIONS.filter(item =>
-        item.toLowerCase().includes(searchTerm.toLowerCase().trim())
+        item.label.toLowerCase().includes(searchTerm.toLowerCase().trim())
       );
       setFilteredSuggestions(filtered);
       setShowSuggestions(filtered.length > 0);
@@ -40,7 +45,7 @@ const HomePage: React.FC = () => {
       setFilteredSuggestions(SUGGESTIONS);
       setShowSuggestions(false);
     }
-  }, [searchTerm]); // ✅ sem `suggestions` aqui
+  }, [searchTerm]);
 
   // Fecha a caixa de sugestões ao clicar fora
   useEffect(() => {
@@ -58,21 +63,42 @@ const HomePage: React.FC = () => {
     setShowSuggestions(true);
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    setSearchTerm(suggestion);
+  const goTo = (href: string) => {
     setShowSuggestions(false);
+    router.push(href);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleSuggestionClick = (suggestion: { label: string; href: string }) => {
+    setSearchTerm(suggestion.label);
+    goTo(suggestion.href);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
       setShowSuggestions(false);
       (e.target as HTMLInputElement).blur();
+      return;
+    }
+    if (e.key === 'Enter') {
+      // 1) Se houver uma correspondência exata, vai nela
+      const exact = SUGGESTIONS.find(s => s.label.toLowerCase() === searchTerm.toLowerCase().trim());
+      if (exact) {
+        goTo(exact.href);
+        return;
+      }
+      // 2) Se houver filtro com resultados, vai no primeiro resultado
+      if (filteredSuggestions.length > 0) {
+        goTo(filteredSuggestions[0].href);
+        return;
+      }
+      // 3) Fallback para página de busca com query (ajuste a rota se quiser)
+      router.push(`/buscar?q=${encodeURIComponent(searchTerm.trim())}`);
     }
   };
 
-  const handleShortcutClick = (shortcut: string) => {
-    setSearchTerm(shortcut);
-    setShowSuggestions(false);
+  const handleShortcutClick = (shortcut: { label: string; href: string }) => {
+    setSearchTerm(shortcut.label);
+    goTo(shortcut.href);
   };
 
   return (
@@ -82,8 +108,10 @@ const HomePage: React.FC = () => {
         <nav className="w-full border-b border-gray-300 bg-white">
           <div className="max-w-6xl mx-auto w-full">
             <div className="px-4 py-4 flex justify-between items-center">
-              <Image src="/logo.svg" alt="Logo" className="h-8" width={190} height={50}/>
-              <span className="text-gray-700">Entrar</span>
+              <Link href="/">
+                <Image src="/logo.svg" alt="Logo" className="h-8" width={190} height={50}/>
+              </Link>
+              <Link href="/login" className="text-gray-700">Entrar</Link>
             </div>
           </div>
         </nav>
@@ -103,7 +131,7 @@ const HomePage: React.FC = () => {
             {/* Search Container Wrapper */}
             <div className="px-3 relative w-full max-w-2xl">
               {/* Search Container */}
-              <div 
+              <div
                 ref={searchContainerRef}
                 className="flex items-center py-2.5 px-4 border border-[#D7D7D7] rounded-full shadow-[0px_4px_32px_0px_rgba(32,51,86,0.12)] bg-white w-full focus-within:border-black transition-colors duration-200"
               >
@@ -115,8 +143,21 @@ const HomePage: React.FC = () => {
                   onFocus={handleInputFocus}
                   onKeyDown={handleKeyDown}
                   className="w-full h-[50px] pl-4 border-none outline-none text-base text-black"
+                  aria-autocomplete="list"
+                  aria-expanded={showSuggestions}
+                  aria-controls="suggestion-listbox"
                 />
-                <button className="flex w-[50px] h-[50px] rounded-full items-center justify-center aspect-square">
+                <button
+                  onClick={() => {
+                    // comportamento igual ao Enter
+                    const exact = SUGGESTIONS.find(s => s.label.toLowerCase() === searchTerm.toLowerCase().trim());
+                    if (exact) return goTo(exact.href);
+                    if (filteredSuggestions.length > 0) return goTo(filteredSuggestions[0].href);
+                    router.push(`/buscar?q=${encodeURIComponent(searchTerm.trim())}`);
+                  }}
+                  className="flex w-[50px] h-[50px] rounded-full items-center justify-center aspect-square"
+                  aria-label="Buscar"
+                >
                   🔍
                 </button>
               </div>
@@ -124,16 +165,16 @@ const HomePage: React.FC = () => {
               {/* Suggestion Box */}
               {showSuggestions && (
                 <div className="overflow-hidden rounded-[18px] mt-3 border border-gray-400 bg-white shadow-[0px_4px_32px_0px_rgba(32,51,86,0.12)] absolute left-4 right-4">
-                  <ul role="listbox" aria-label="Sugestões">
+                  <ul id="suggestion-listbox" role="listbox" aria-label="Sugestões">
                     {filteredSuggestions.map((suggestion, index) => (
                       <li
-                        key={suggestion + index}
+                        key={suggestion.label + index}
                         onClick={() => handleSuggestionClick(suggestion)}
                         className="p-[18px] hover:bg-gray-100 cursor-pointer text-black"
                         role="option"
                         aria-selected={false}
                       >
-                        {suggestion}
+                        {suggestion.label}
                       </li>
                     ))}
                   </ul>
@@ -144,13 +185,13 @@ const HomePage: React.FC = () => {
               <div className="flex flex-col gap-3 w-full pt-8">
                 <span className="text-gray-700">Mais buscados</span>
                 <div className="flex flex-wrap gap-3">
-                  {SHORTCUT_BUTTONS.map((shortcut, index) => (
+                  {SHORTCUTS.map((shortcut, index) => (
                     <button
-                      key={shortcut + index}
+                      key={shortcut.label + index}
                       onClick={() => handleShortcutClick(shortcut)}
                       className="rounded-[50px] border border-[#D3D3D3] text-base text-[#545860] py-2.5 px-4 bg-transparent hover:bg-[#0e7A60] hover:text-white hover:border-[#0e7A60] transition-colors duration-200"
                     >
-                      {shortcut}
+                      {shortcut.label}
                     </button>
                   ))}
                 </div>

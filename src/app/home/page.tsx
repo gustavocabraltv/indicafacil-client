@@ -1,3 +1,4 @@
+import Search from "@/components/Search";
 import Wrapper from "@/components/Wrapper";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
 
 
         <>
+        <Search/>
             <div id='highlight' className=" overflow-hidden flex flex-col">
 
 
