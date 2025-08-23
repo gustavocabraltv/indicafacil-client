@@ -98,7 +98,7 @@ export default function TabServices() {
     const current = CATEGORIES.find(c => c.id === active)!;
 
     return (
-        <div className="overflow-hidden">
+        <div className="overflow-hidden bg-white">
             {/* NAV */}
             <nav aria-label="Categorias de serviços" className="border-b">
                 <ul
@@ -145,7 +145,7 @@ export default function TabServices() {
                 id={`${baseId}-panel-${current.id}`}
                 role="tabpanel"
                 aria-labelledby={`${baseId}-tab-${current.id}`}
-                className="w-full  p-4"
+                className="w-full p-4 min-h-[160px]"
             >
                 <ul className="flex flex-wrap content-start items-start gap-x-3 gap-y-3">
                     {current.services.map(s => (

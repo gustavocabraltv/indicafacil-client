@@ -20,7 +20,7 @@ export default function Banner() {
 
 
         >
-            <div className='mt-40'>
+            <div className='mt-40 bg-[blue]'>
                 <SwiperSlide>
                     <div className="bg-blue-200 aspect-video flex items-center justify-center rounded-xl">
                         Slide 1
