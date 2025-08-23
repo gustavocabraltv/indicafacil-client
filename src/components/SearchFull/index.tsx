@@ -42,7 +42,9 @@ export default function SearchFull({ onClose }: SearchFullProps) {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="O que você precisa?"
-                        className="bg-transparent outline-none font-medium flex-1 ml-1"
+                        className="bg-transparent outline-none font-medium flex-1 ml-1
+                         text-[16px] placeholder:text-[16px] leading-tight"
+
                     />
                 </div>
             </Wrapper>
