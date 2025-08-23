@@ -8,6 +8,7 @@ import Wrapper from "@/components/Wrapper";
 import Image from 'next/image'
 import TabServices from '@/components/TabServices';
 import Banner from '@/components/Banner';
+import BannerPromo from '@/components/BannerPromo';
 
 export default function Home2() {
     const [showFullSearch, setShowFullSearch] = useState(false);
@@ -33,6 +34,11 @@ export default function Home2() {
             
             <div className='bg-white py-4'>
                 <Banner />
+            </div>
+
+
+            <div className='bg-white py-4'>
+                <BannerPromo />
             </div>
 
         </div>
