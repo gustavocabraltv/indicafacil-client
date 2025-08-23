@@ -80,7 +80,7 @@ const CATEGORIES = [
     },
 ];
 
-export default function Shortcut() {
+export default function TabServices() {
     const [active, setActive] = useState(CATEGORIES[0].id);
     const baseId = useId();
 
@@ -145,7 +145,7 @@ export default function Shortcut() {
                 id={`${baseId}-panel-${current.id}`}
                 role="tabpanel"
                 aria-labelledby={`${baseId}-tab-${current.id}`}
-                className="w-full bg-gray-50 p-4"
+                className="w-full  p-4"
             >
                 <ul className="flex flex-wrap content-start items-start gap-x-3 gap-y-3">
                     {current.services.map(s => (
