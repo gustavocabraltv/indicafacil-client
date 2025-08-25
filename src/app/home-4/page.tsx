@@ -22,7 +22,7 @@ export default function Home4() {
     return (
         <div className='bg-[#F3F4F6] flex flex-col gap-0'>
 
-       
+
 
             <Container>
                 <TabServices2 />
@@ -95,6 +95,8 @@ export default function Home4() {
             </Container> */}
 
 
+
+
             <Container>
                 <Swiper
                     spaceBetween={12}
@@ -114,9 +116,9 @@ export default function Home4() {
                     <SwiperSlide>
                         <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
                             <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/martelo-3d.png' alt='encanador' width={50} height={50} />
+                                <Image src='/limpeza-3d.png' alt='encanador' width={50} height={50} />
                             </div>
-                            <span>Pedreiro</span>
+                            <span>Diarista</span>
                         </div>
                     </SwiperSlide>
                     <SwiperSlide>
@@ -130,7 +132,15 @@ export default function Home4() {
                     <SwiperSlide>
                         <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
                             <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/martelo-3d.png' alt='encanador' width={50} height={50} />
+                                <Image src='/montagem-3d.png' alt='encanador' width={50} height={50} />
+                            </div>
+                            <span>Montagem</span>
+                        </div>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                <Image src='/ar-condicionado-3d.png' alt='encanador' width={50} height={50} />
                             </div>
                             <span>Pedreiro</span>
                         </div>
@@ -138,17 +148,9 @@ export default function Home4() {
                     <SwiperSlide>
                         <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
                             <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/martelo-3d.png' alt='encanador' width={50} height={50} />
+                                <Image src='/frete-3d.png' alt='encanador' width={50} height={50} />
                             </div>
-                            <span>Pedreiro</span>
-                        </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
-                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/martelo-3d.png' alt='encanador' width={50} height={50} />
-                            </div>
-                            <span>Pedreiro</span>
+                            <span>Mudança</span>
                         </div>
                     </SwiperSlide>
 
@@ -161,6 +163,7 @@ export default function Home4() {
             <Container>
                 <Banner />
             </Container>
+
 
 
             <div className='bg-white py-4'>
