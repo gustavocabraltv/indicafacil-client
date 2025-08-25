@@ -24,7 +24,7 @@ export default function Home4() {
 
 
 
-            
+
 
             <Container>
                 <LocationSearch />
@@ -33,12 +33,12 @@ export default function Home4() {
             <Container>
                 <Wrapper>
                     <div className=' grid grid-cols-2 text-xs text-gray-950 gap-4 font-semibold'>
-
-                        <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-end relative'>
-                            <Image className='absolute right-0' src='/marido-de-aluguel-3d.png' width={77} height={74} alt='Pintor' />
-                            <span>Marido de aluguel</span>
-                        </div>
-
+                        <Link href="/marido-de-aluguel">
+                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-end relative'>
+                                <Image className='absolute right-0' src='/marido-de-aluguel-3d.png' width={77} height={74} alt='Pintor' />
+                                <span>Marido de aluguel</span>
+                            </div>
+                        </Link>
                         <Link href="/pintura">
                             <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-end relative'>
                                 <Image className='absolute right-0' src='/pintor-3d.png' width={77} height={74} alt='Pintor' />
@@ -104,52 +104,74 @@ export default function Home4() {
                 >
 
                     <SwiperSlide>
-                        <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
-                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/martelo-3d.png' alt='encanador' width={50} height={50} />
+                        <Link href="/pedreiro">
+                            <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                                <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                    <Image src='/martelo-3d.png' alt='encanador' width={50} height={50} />
+                                </div>
+                                <span>Pedreiro</span>
                             </div>
-                            <span>Pedreiro</span>
-                        </div>
+                        </Link>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
-                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/limpeza-3d.png' alt='encanador' width={50} height={50} />
+                        <Link href="/diarista">
+                            <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                                <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                    <Image src='/limpeza-3d.png' alt='encanador' width={50} height={50} />
+                                </div>
+                                <span>Diarista</span>
                             </div>
-                            <span>Diarista</span>
-                        </div>
+                        </Link>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
-                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/encanador-3d.png' alt='encanador' width={50} height={50} />
+                        <Link href="/encanador">
+                            <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                                <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                    <Image src='/encanador-3d.png' alt='encanador' width={50} height={50} />
+                                </div>
+                                <span>Encanador</span>
                             </div>
-                            <span>Encanador</span>
-                        </div>
+                        </Link>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
-                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/montagem-3d.png' alt='encanador' width={50} height={50} />
+                        <Link href="/montagem">
+                            <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                                <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                    <Image src='/montagem-3d.png' alt='encanador' width={50} height={50} />
+                                </div>
+                                <span>Montagem</span>
                             </div>
-                            <span>Montagem</span>
-                        </div>
+                        </Link>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
-                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/ar-condicionado-3d.png' alt='encanador' width={50} height={50} />
+                        <Link href="/ar-condicionado">
+                            <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                                <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                    <Image src='/ar-condicionado-3d.png' alt='encanador' width={50} height={50} />
+                                </div>
+                                <span>Serviço de Ar</span>
                             </div>
-                            <span>Serviço de Ar</span>
-                        </div>
+                        </Link>
                     </SwiperSlide>
                     <SwiperSlide>
-                        <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
-                            <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/frete-3d.png' alt='encanador' width={50} height={50} />
+                        <Link href="/caminhao-de-mudanca">
+                            <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                                <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                    <Image src='/frete-3d.png' alt='encanador' width={50} height={50} />
+                                </div>
+                                <span>Mudança</span>
                             </div>
-                            <span>Mudança</span>
-                        </div>
+                        </Link>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                        <Link href="/eletricista">
+                            <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                                <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                    <Image src='/lampada-3d.png' alt='encanador' width={50} height={50} />
+                                </div>
+                                <span>Eletricista</span>
+                            </div>
+                        </Link>
                     </SwiperSlide>
 
 
