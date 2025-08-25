@@ -167,12 +167,25 @@ export default function Home4() {
                         <Link href="/eletricista">
                             <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
                                 <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
+                                    <Image src='/jardineiro4-3d.png' alt='jardineiro' width={50} height={50} />
+                                </div>
+                                <span>Jardineiro</span>
+                            </div>
+                        </Link>
+                    </SwiperSlide>
+
+                    <SwiperSlide>
+                        <Link href="/eletricista">
+                            <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
+                                <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
                                     <Image src='/lampada-3d.png' alt='encanador' width={50} height={50} />
                                 </div>
                                 <span>Eletricista</span>
                             </div>
                         </Link>
                     </SwiperSlide>
+
+
 
 
 

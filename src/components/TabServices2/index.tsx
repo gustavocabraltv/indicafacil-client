@@ -17,11 +17,11 @@ const CATEGORIES = [
         icon: '/pintura.svg',
         services: [
             { label: 'Pintura Residencial', href: '/pintura' },
-            { label: 'Pintura Comercial', href: '/servicos/pintura-comercial' },
-            { label: 'Pintura Texturizada', href: '/servicos/pintura-texturizada' },
-            { label: 'Desocupação de imóveis', href: '/servicos/desocupacao' },
-            { label: 'Papel de parede', href: '/servicos/papel-de-parede' },
-            { label: 'Pintura de muros', href: '/servicos/pintura-muros' },
+            { label: 'Pintura Comercial', href: '/pintura' },
+            { label: 'Pintura Texturizada', href: '/pintura' },
+            { label: 'Desocupação de imóveis', href: '/pintura' },
+            { label: 'Papel de parede', href: '/pintura' },
+            { label: 'Pintura de muros', href: '/pintura' },
         ],
     },
     {
@@ -29,9 +29,9 @@ const CATEGORIES = [
         label: 'Eletricista',
         icon: '/eletricista.svg',
         services: [
-            { label: 'Instalação de tomadas', href: '/servicos/tomadas' },
-            { label: 'Troca de disjuntores', href: '/servicos/disjuntores' },
-            { label: 'Instalação de luminárias', href: '/servicos/luminarias' },
+            { label: 'Instalação de tomadas', href: '/eletricista' },
+            { label: 'Troca de disjuntores', href: '/eletricista' },
+            { label: 'Instalação de luminárias', href: '/eletricista' },
         ],
     },
     {
@@ -39,9 +39,9 @@ const CATEGORIES = [
         label: 'Pedreiro',
         icon: '/pedreiro.svg',
         services: [
-            { label: 'Assentamento de pisos', href: '/servicos/pisos' },
-            { label: 'Reboco e alvenaria', href: '/servicos/reboco' },
-            { label: 'Pequenos reparos', href: '/servicos/reparos' },
+            { label: 'Assentamento de pisos', href: '/pedreiro' },
+            { label: 'Reboco e alvenaria', href: '/pedreiro' },
+            { label: 'Pequenos reparos', href: '/pedreiro' },
         ],
     },
     {
@@ -49,9 +49,9 @@ const CATEGORIES = [
         label: 'Diarista',
         icon: '/diarista.svg',
         services: [
-            { label: 'Limpeza residencial', href: '/servicos/limpeza-residencial' },
-            { label: 'Limpeza pós-obra', href: '/servicos/limpeza-pos-obra' },
-            { label: 'Organização de ambientes', href: '/servicos/organizacao' },
+            { label: 'Limpeza residencial', href: '/diarista' },
+            { label: 'Limpeza pós-obra', href: '/diarista' },
+            { label: 'Organização de ambientes', href: '/diarista' },
         ],
     },
     {
@@ -59,9 +59,9 @@ const CATEGORIES = [
         label: 'Marido de Aluguel',
         icon: '/marido-de-aluguel.svg',
         services: [
-            { label: 'Montagem de móveis', href: '/servicos/montagem' },
-            { label: 'Fixação de prateleiras', href: '/servicos/prateleiras' },
-            { label: 'Reparos gerais', href: '/servicos/reparos-gerais' },
+            { label: 'Montagem de móveis', href: '/marido-de-aluguel' },
+            { label: 'Fixação de prateleiras', href: '/marido-de-aluguel' },
+            { label: 'Reparos gerais', href: '/marido-de-aluguel' },
         ],
     },
     {
@@ -69,9 +69,9 @@ const CATEGORIES = [
         label: 'Encanador',
         icon: '/eletricista.svg',
         services: [
-            { label: 'Desentupimento', href: '/servicos/desentupimento' },
-            { label: 'Troca de torneiras', href: '/servicos/torneiras' },
-            { label: 'Instalação de chuveiro', href: '/servicos/chuveiro' },
+            { label: 'Desentupimento', href: '/encanador' },
+            { label: 'Troca de torneiras', href: '/encanador' },
+            { label: 'Instalação de chuveiro', href: '/encanador' },
         ],
     },
     {
@@ -79,9 +79,9 @@ const CATEGORIES = [
         label: 'Jardineiro',
         icon: '/eletricista.svg',
         services: [
-            { label: 'Corte de grama', href: '/servicos/grama' },
-            { label: 'Poda de árvores', href: '/servicos/poda' },
-            { label: 'Manutenção de jardim', href: '/servicos/jardim' },
+            { label: 'Corte de grama', href: '/jardineiro' },
+            { label: 'Poda de árvores', href: '/jardineiro' },
+            { label: 'Manutenção de jardim', href: '/jardineiro' },
         ],
     },
 ];
