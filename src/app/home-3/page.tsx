@@ -9,32 +9,27 @@ import Image from 'next/image'
 import TabServices from '@/components/TabServices';
 import Banner from '@/components/Banner';
 import BannerPromo from '@/components/BannerPromo';
+import Container from '@/components/Container'
+import LocationSearch from '@/components/LocationSearch';
 
-export default function Home2() {
-    const [showFullSearch, setShowFullSearch] = useState(false);
+
+export default function Home3() {
+    // const [showFullSearch, setShowFullSearch] = useState(false);
 
     return (
         <div className='bg-[#F3F4F6] flex flex-col gap-4'>
 
+            <Container>
+                <LocationSearch />
+            </Container>
 
-            <Wrapper className=' bg-white py-4 w-full'>
-                <div className='flex gap-2 text-black font-semibold underline decoration-dotted decoration-gray-400 underline-offset-6'>
-                    <Image src='/location.svg' alt='location' width={20} height={20} />
-                    <span>Criciúma, Santa Catarina</span>
-                </div>
-                {showFullSearch ? (
-                    <SearchFull onClose={() => setShowFullSearch(false)} />
-                ) : (
-                    <Search onOpen={() => setShowFullSearch(true)} />
-                )}
-            </Wrapper>
+            <Container>
+                <TabServices />
+            </Container>
 
-
-            <TabServices />
-            
-            <div className='bg-white py-4'>
+            <Container>
                 <Banner />
-            </div>
+            </Container>
 
 
             <div className='bg-white py-4'>

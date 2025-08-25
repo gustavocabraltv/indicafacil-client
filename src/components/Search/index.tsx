@@ -6,9 +6,16 @@ import Wrapper from '../Wrapper';
 
 type SearchProps = {
   onOpen?: () => void;
+  variant?: 'default' | 'alt';
 };
 
-export default function Search({ onOpen }: SearchProps) {
+const searchVariants = {
+  default: "flex items-center gap-1 text-[15px] rounded-full p-3 border border-gray-200 text-gray-700 beautifull-shadow bg-white cursor-pointer",
+  alt: "flex items-center gap-1 text-[15px] rounded-full p-3 border border-gray-200 text-gray-700  bg-gray-200 cursor-pointer"
+};
+
+
+export default function Search({ onOpen, variant = 'default' }: SearchProps) {
   const terms = useMemo(
     () => ['pintores em Criciúma', 'diarista em Criciúma', 'pedreiro em Criciúma'],
     []
@@ -50,7 +57,7 @@ export default function Search({ onOpen }: SearchProps) {
     <div className='mt-4'>
       <div
         onClick={onOpen}
-        className="flex items-center gap-1 text-[15px] rounded-full p-3 border border-gray-200 text-gray-700 beautifull-shadow bg-white cursor-pointer"
+        className={searchVariants[variant]} 
         aria-label={`Buscar ${text || terms[loop % terms.length]}`}
       >
         <Image src="/search.svg" width={24} height={24} alt="Buscar" className='mr-1'/>
