@@ -124,9 +124,9 @@ export default function Home4() {
                     <SwiperSlide>
                         <div className='flex flex-col gap-2 items-center text-black text-xs font-semibold'>
                             <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
-                                <Image src='/martelo-3d.png' alt='encanador' width={50} height={50} />
+                                <Image src='/encanador-3d.png' alt='encanador' width={50} height={50} />
                             </div>
-                            <span>Pedreiro</span>
+                            <span>Encanador</span>
                         </div>
                     </SwiperSlide>
                     <SwiperSlide>
@@ -142,7 +142,7 @@ export default function Home4() {
                             <div className='flex w-full h-[86px] bg-gray-100 rounded-md p-3 items-center justify-center'>
                                 <Image src='/ar-condicionado-3d.png' alt='encanador' width={50} height={50} />
                             </div>
-                            <span>Pedreiro</span>
+                            <span>Serviço de Ar</span>
                         </div>
                     </SwiperSlide>
                     <SwiperSlide>
