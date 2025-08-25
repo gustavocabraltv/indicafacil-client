@@ -11,7 +11,7 @@ type SearchProps = {
 
 const searchVariants = {
   default: "flex items-center gap-1 text-[15px] rounded-full p-3 border border-gray-200 text-gray-700 beautifull-shadow bg-white cursor-pointer",
-  alt: "flex items-center gap-1 text-[15px] rounded-full p-3 border border-gray-200 text-gray-700  bg-gray-100 cursor-pointer"
+  alt: "flex items-center gap-1 text-[15px] rounded-full p-3 border border-gray-100 text-gray-700  bg-gray-100 cursor-pointer"
 };
 
 
