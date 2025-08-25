@@ -24,9 +24,7 @@ export default function Home4() {
 
 
 
-            <Container>
-                <TabServices2 />
-            </Container>
+            
 
             <Container>
                 <LocationSearch />
@@ -169,6 +167,10 @@ export default function Home4() {
             <div className='bg-white py-4'>
                 <BannerPromo />
             </div>
+
+            <Container>
+                <TabServices2 />
+            </Container>
 
         </div>
     );
