@@ -6,8 +6,9 @@ import SearchFull from "@/components/SearchFull";
 import Shortcut from "@/components/TabServices";
 import Wrapper from "@/components/Wrapper";
 import Image from 'next/image'
-import TabServices from '@/components/TabServices';
+import TabServices from '@/components/TabServices2';
 import Banner from '@/components/Banner';
+import ServicePopular from '@/components/ServicePopular';
 
 export default function Home2() {
     const [showFullSearch, setShowFullSearch] = useState(false);
@@ -33,6 +34,7 @@ export default function Home2() {
             <div className='mx-auto max-w-screen-xl px-0 sm:px-6 lg:px-8 py-4'>
                 <Banner />
             </div>
+            <ServicePopular />
 
         </>
     );

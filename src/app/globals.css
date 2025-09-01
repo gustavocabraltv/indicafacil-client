@@ -26,6 +26,10 @@
     @apply flex text-[#505561] text-sm px-4 py-2 border border-gray-700 rounded-full cursor-pointer h-fit
   }
 
+  .card-popular {
+    @apply p-3 rounded-md border-[0.25px] border-gray-200 bg-white w-full lg:w-fit flex gap-4 items-center
+  }
+
 }
 
 @layer utilities {
