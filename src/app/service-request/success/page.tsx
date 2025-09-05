@@ -3,12 +3,15 @@ import Link from 'next/link'
 import { serviceCategories } from '@/configs/service-categories'
 import { Button } from '@/components/ui/button'
 
-export default function SuccessPage({
+// Em Next 15, searchParams é Promise<...>, então a page precisa ser async
+export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams: { category?: string }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const categoryId = searchParams?.category ?? ''
+  const sp = await searchParams
+  const raw = sp?.category
+  const categoryId = Array.isArray(raw) ? raw[0] : raw ?? ''
   const categoryInfo = serviceCategories.find((cat) => cat.id === categoryId)
 
   return (
