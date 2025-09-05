@@ -9,6 +9,7 @@ import Image from 'next/image'
 import TabServices from '@/components/TabServices2';
 import Banner from '@/components/Banner';
 import ServicePopular from '@/components/ServicePopular';
+import Multistep from '@/components/Multistep';
 
 export default function Home2() {
     const [showFullSearch, setShowFullSearch] = useState(false);
@@ -35,6 +36,10 @@ export default function Home2() {
                 <Banner />
             </div>
             <ServicePopular />
+
+            <Wrapper className='py-8'>
+                <Multistep/>
+            </Wrapper>
 
         </>
     );

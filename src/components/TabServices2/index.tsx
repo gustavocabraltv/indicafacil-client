@@ -189,7 +189,7 @@ export default function TabServices() {
                     id={`${baseId}-panel-${current.id}`}
                     role="tabpanel"
                     aria-labelledby={`${baseId}-tab-${current.id}`}
-                    className="w-full min-h-[160px]"
+                    className="w-full min-h-[160px] pt-4"
                 >
                     <ul className="flex flex-wrap content-start items-start gap-x-3 gap-y-3">
                         {current.services.map(s => (
