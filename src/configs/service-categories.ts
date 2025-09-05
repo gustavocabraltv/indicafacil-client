@@ -1,93 +1,120 @@
 // configs/service-categories.ts
 import { MultistepConfig } from '@/types/multistep';
 
-// Configuração para Pintura (3231)
+// Configuração para Pintura (3231) - Mantida igual
 export const pinturaConfig: MultistepConfig = {
   id: 'pintura-service',
-  title: 'Serviço de Pintura',
+  title: 'Serviço de Pintura',  
   category: '3231',
   steps: [
     {
-      id: 'location-type',
-      title: 'Onde será a pintura?',
+      id: 'paint-type',
+      title: 'Que tipo de pintura você precisa?',
       fields: [
         {
-          id: 'property-type',
-          type: 'radio',
-          label: 'Tipo de imóvel',
-          required: true,
-          options: [
-            { value: 'apartamento', label: 'Apartamento' },
-            { value: 'casa', label: 'Casa' },
-            { value: 'comercial', label: 'Comercial/Escritório' },
-            { value: 'condominio', label: 'Condomínio (área comum)' },
-          ]
-        }
-      ]
-    },
-    {
-      id: 'paint-details',
-      title: 'Detalhes da Pintura',
-      fields: [
-        {
-          id: 'room-types',
-          type: 'checkbox',
-          label: 'Quais cômodos serão pintados?',
-          required: true,
-          options: [
-            { value: 'sala', label: 'Sala' },
-            { value: 'quartos', label: 'Quartos' },
-            { value: 'cozinha', label: 'Cozinha' },
-            { value: 'banheiro', label: 'Banheiro' },
-            { value: 'area-externa', label: 'Área externa' },
-            { value: 'todos', label: 'Casa/apartamento inteiro' },
-          ]
-        },
-        {
-          id: 'paint-type',
+          id: 'paint-location',
           type: 'radio',
           label: 'Tipo de pintura',
           required: true,
           options: [
-            { value: 'latex', label: 'Tinta látex (parede comum)' },
-            { value: 'acrilica', label: 'Tinta acrílica (área externa)' },
-            { value: 'esmalte', label: 'Esmalte (madeira/metal)' },
-            { value: 'textura', label: 'Textura decorativa' },
+            { value: 'interior', label: 'Interior (dentro de casa)' },
+            { value: 'exterior', label: 'Exterior (parte de fora)' },
+            { value: 'acabamentos', label: 'Acabamentos especiais' },
           ]
         },
         {
-          id: 'area-size',
+          id: 'additional-details',
+          type: 'textarea',
+          label: 'Conte mais detalhes, se quiser...',
+          placeholder: 'Descreva detalhes específicos sobre o tipo de pintura que precisa...',
+        }
+      ]
+    },
+
+    {
+      id: 'property-type',
+      title: 'Qual é o tipo de imóvel?',
+      fields: [
+        {
+          id: 'property-category',
           type: 'radio',
-          label: 'Tamanho aproximado da área',
+          label: 'Tipo de imóvel',
           required: true,
           options: [
-            { value: 'pequena', label: 'Pequena (até 30m²)', price: 'R$ 800-1.200' },
-            { value: 'media', label: 'Média (30-60m²)', price: 'R$ 1.200-2.000' },
-            { value: 'grande', label: 'Grande (60-100m²)', price: 'R$ 2.000-3.500' },
-            { value: 'muito-grande', label: 'Muito grande (100m²+)', price: 'R$ 3.500+' },
+            { value: 'residencial', label: 'Residencial' },
+            { value: 'comercial', label: 'Comercial' },
+            { value: 'outro', label: 'Outro' },
           ]
         }
       ]
     },
+
     {
-      id: 'additional-services',
-      title: 'Serviços Adicionais',
+      id: 'rooms-quantity',
+      title: 'Quantos cômodos você quer pintar?',
       fields: [
         {
-          id: 'extras',
-          type: 'checkbox',
-          label: 'Precisa de algum serviço extra?',
+          id: 'room-count',
+          type: 'radio',
+          label: 'Quantidade de cômodos',
+          required: true,
           options: [
-            { value: 'preparacao-parede', label: 'Preparação da parede (massa corrida)' },
-            { value: 'remocao-papel', label: 'Remoção de papel de parede' },
-            { value: 'pintura-moveis', label: 'Pintura de móveis' },
-            { value: 'limpeza-pos', label: 'Limpeza pós-serviço' },
+            { value: '1-2', label: '1–2 cômodos' },
+            { value: '3-4', label: '3–4 cômodos' },
+            { value: '5-mais', label: '5 ou mais' },
           ]
-        },
+        }
+      ]
+    },
+
+    {
+      id: 'room-selection',
+      title: 'Quais desses ambientes fazem parte do serviço?',
+      fields: [
+        {
+          id: 'selected-rooms',
+          type: 'checkbox',
+          label: 'Ambientes (multi-seleção)',
+          required: true,
+          options: [
+            { value: 'quartos', label: 'Quartos' },
+            { value: 'sala-convivencia', label: 'Sala / áreas de convivência' },
+            { value: 'banheiros', label: 'Banheiros' },
+            { value: 'cozinha', label: 'Cozinha' },
+            { value: 'corredores', label: 'Corredores' },
+            { value: 'escadas', label: 'Escadas' },
+            { value: 'outro', label: 'Outro' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'property-status',
+      title: 'O imóvel está mobiliado e ocupado?',
+      fields: [
+        {
+          id: 'occupancy-status',
+          type: 'radio',
+          label: 'Status do imóvel',
+          required: true,
+          options: [
+            { value: 'mobiliado-ocupado', label: 'Mobiliado e ocupado' },
+            { value: 'mobiliado-vazio', label: 'Mobiliado, mas vazio' },
+            { value: 'sem-mobilia', label: 'Sem mobília e vazio' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'material-preference',
+      title: 'Sobre os materiais, como você prefere?',
+      fields: [
         {
           id: 'material-included',
           type: 'radio',
-          label: 'Material incluído?',
+          label: 'Material incluído',
           required: true,
           options: [
             { value: 'profissional-fornece', label: 'Profissional fornece o material' },
@@ -97,32 +124,242 @@ export const pinturaConfig: MultistepConfig = {
         }
       ]
     },
+
     {
-      id: 'timing-contact',
-      title: 'Prazo e Contato',
+      id: 'timing',
+      title: 'Para quando você precisa do serviço?',
       fields: [
         {
           id: 'urgency',
           type: 'radio',
-          label: 'Quando precisa do serviço?',
+          label: 'Prazo desejado',
           required: true,
           options: [
-            { value: 'flexivel', label: 'Flexível - posso esperar' },
-            { value: 'duas-semanas', label: 'Nas próximas 2 semanas' },
-            { value: 'uma-semana', label: 'Na próxima semana' },
-            { value: 'urgente', label: 'Urgente - esta semana' },
+            { value: 'urgente', label: 'Urgente (o quanto antes)' },
+            { value: '1-semana', label: 'Dentro de 1 semana' },
+            { value: '15-dias', label: 'Nos próximos 15 dias' },
+            { value: 'sem-data', label: 'Sem data definida' },
           ]
-        },
+        }
+      ]
+    },
+
+    {
+      id: 'project-stage',
+      title: 'Em que etapa você está?',
+      fields: [
         {
-          id: 'additional-info',
-          type: 'textarea',
-          label: 'Informações adicionais',
-          placeholder: 'Descreva detalhes específicos, preferências de cor, horários disponíveis...',
-        },
+          id: 'stage',
+          type: 'radio',
+          label: 'Etapa do projeto',
+          required: true,
+          options: [
+            { value: 'pronto-contratar', label: 'Pronto para contratar' },
+            { value: 'planejando', label: 'Só planejando / fazendo orçamento' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'contact-data',
+      title: 'Quase lá! Só precisamos dos seus dados para enviar os orçamentos:',
+      fields: [
         {
           id: 'name',
           type: 'text',
-          label: 'Seu nome',
+          label: 'Nome',
+          required: true,
+        },
+        // {
+        //   id: 'surname',
+        //   type: 'text',
+        //   label: 'Sobrenome',
+        //   required: true,
+        // },
+        {
+          id: 'phone',
+          type: 'phone',
+          label: 'WhatsApp',
+          required: true,
+          placeholder: '(11) 99999-9999'
+        },
+        {
+          id: 'newsletter-opt-in',
+          type: 'checkbox',
+          label: 'Comunicações opcionais',
+          options: [
+            { value: 'tips-guides', label: 'Quero receber dicas e guias de pintura no WhatsApp' },
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+// Configuração para Encanador (3232) - Melhorada
+export const encanadorConfig: MultistepConfig = {
+  id: 'encanador-service',
+  title: 'Serviço de Encanamento',
+  category: '3232',
+  steps: [
+    {
+      id: 'service-type',
+      title: 'Qual tipo de serviço de encanamento você precisa?',
+      fields: [
+        {
+          id: 'service-category',
+          type: 'radio',
+          label: 'Tipo de serviço',
+          required: true,
+          options: [
+            { value: 'vazamento', label: 'Vazamento (emergência)', badge: 'Urgente' },
+            { value: 'entupimento', label: 'Desentupimento' },
+            { value: 'instalacao', label: 'Instalação nova' },
+            { value: 'manutencao', label: 'Manutenção e reparos' },
+            { value: 'troca-equipamentos', label: 'Troca de equipamentos' },
+          ]
+        },
+        {
+          id: 'additional-details',
+          type: 'textarea',
+          label: 'Conte mais detalhes sobre o problema...',
+          placeholder: 'Ex: Torneira pingando, água vazando pelo teto, vaso entupido, preciso instalar chuveiro...',
+        }
+      ]
+    },
+
+    {
+      id: 'property-type',
+      title: 'Qual é o tipo de imóvel?',
+      fields: [
+        {
+          id: 'property-category',
+          type: 'radio',
+          label: 'Tipo de imóvel',
+          required: true,
+          options: [
+            { value: 'apartamento', label: 'Apartamento' },
+            { value: 'casa', label: 'Casa' },
+            { value: 'comercial', label: 'Comercial/Escritório' },
+            { value: 'outro', label: 'Outro' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'problem-locations',
+      title: 'Em quais ambientes está o problema?',
+      fields: [
+        {
+          id: 'affected-locations',
+          type: 'checkbox',
+          label: 'Locais afetados (multi-seleção)',
+          required: true,
+          options: [
+            { value: 'banheiro', label: 'Banheiro' },
+            { value: 'cozinha', label: 'Cozinha' },
+            { value: 'area-servico', label: 'Área de serviço / lavanderia' },
+            { value: 'quintal', label: 'Quintal / área externa' },
+            { value: 'toda-casa', label: 'Casa / apartamento todo' },
+            { value: 'outro', label: 'Outro local' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'specific-items',
+      title: 'Quais equipamentos ou itens precisam de atenção?',
+      fields: [
+        {
+          id: 'equipment-items',
+          type: 'checkbox',
+          label: 'Equipamentos e itens',
+          options: [
+            { value: 'torneira', label: 'Torneira' },
+            { value: 'chuveiro', label: 'Chuveiro' },
+            { value: 'vaso-sanitario', label: 'Vaso sanitário' },
+            { value: 'pia', label: 'Pia / lavatório' },
+            { value: 'canos-tubulacao', label: 'Canos / tubulação' },
+            { value: 'ralo', label: 'Ralo' },
+            { value: 'registro', label: 'Registro' },
+            { value: 'outro', label: 'Outro item' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'material-preference',
+      title: 'Sobre peças e materiais, como prefere?',
+      fields: [
+        {
+          id: 'material-included',
+          type: 'radio',
+          label: 'Fornecimento de material',
+          required: true,
+          options: [
+            { value: 'profissional-fornece', label: 'Profissional traz as peças' },
+            { value: 'cliente-fornece', label: 'Eu forneço as peças' },
+            { value: 'orcamento-separado', label: 'Orçar peças separadamente' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'timing',
+      title: 'Para quando você precisa do serviço?',
+      fields: [
+        {
+          id: 'urgency',
+          type: 'radio',
+          label: 'Urgência do serviço',
+          required: true,
+          options: [
+            { value: 'emergencia', label: 'Emergência - vazamento grave', badge: 'Taxa urgência' },
+            { value: 'hoje', label: 'Preciso hoje' },
+            { value: 'amanha', label: 'Até amanhã' },
+            { value: 'semana', label: 'Esta semana' },
+            { value: 'flexivel', label: 'Posso aguardar' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'project-stage',
+      title: 'Em que etapa você está?',
+      fields: [
+        {
+          id: 'stage',
+          type: 'radio',
+          label: 'Etapa do projeto',
+          required: true,
+          options: [
+            { value: 'pronto-contratar', label: 'Pronto para contratar' },
+            { value: 'planejando', label: 'Só planejando / fazendo orçamento' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'contact-data',
+      title: 'Quase lá! Só precisamos dos seus dados para conectar com encanadores:',
+      fields: [
+        {
+          id: 'name',
+          type: 'text',
+          label: 'Nome',
+          required: true,
+        },
+        {
+          id: 'surname',
+          type: 'text',
+          label: 'Sobrenome',
           required: true,
         },
         {
@@ -131,122 +368,21 @@ export const pinturaConfig: MultistepConfig = {
           label: 'WhatsApp',
           required: true,
           placeholder: '(11) 99999-9999'
+        },
+        {
+          id: 'newsletter-opt-in',
+          type: 'checkbox',
+          label: 'Comunicações opcionais',
+          options: [
+            { value: 'tips-guides', label: 'Quero receber dicas de manutenção hidráulica no WhatsApp' },
+          ]
         }
       ]
     }
   ]
 };
 
-// Configuração para Encanador (3232)
-export const encanadorConfig: MultistepConfig = {
-  id: 'encanador-service',
-  title: 'Serviço de Encanamento',
-  category: '3232',
-  steps: [
-    {
-      id: 'location-problem',
-      title: 'Onde está o problema?',
-      fields: [
-        {
-          id: 'property-type',
-          type: 'radio',
-          label: 'Tipo de imóvel',
-          required: true,
-          options: [
-            { value: 'apartamento', label: 'Apartamento' },
-            { value: 'casa', label: 'Casa' },
-            { value: 'comercial', label: 'Comercial/Escritório' },
-          ]
-        },
-        {
-          id: 'problem-location',
-          type: 'checkbox',
-          label: 'Quais locais?',
-          required: true,
-          options: [
-            { value: 'banheiro', label: 'Banheiro' },
-            { value: 'cozinha', label: 'Cozinha' },
-            { value: 'area-servico', label: 'Área de serviço' },
-            { value: 'quintal', label: 'Quintal/área externa' },
-            { value: 'toda-casa', label: 'Casa toda' },
-          ]
-        }
-      ]
-    },
-    {
-      id: 'problem-type',
-      title: 'Qual o problema?',
-      fields: [
-        {
-          id: 'service-type',
-          type: 'checkbox',
-          label: 'Tipo de serviço necessário',
-          required: true,
-          options: [
-            { value: 'vazamento', label: 'Vazamento', badge: 'Urgente' },
-            { value: 'entupimento', label: 'Entupimento' },
-            { value: 'instalacao', label: 'Instalação nova' },
-            { value: 'manutencao', label: 'Manutenção preventiva' },
-            { value: 'troca-pecas', label: 'Troca de peças' },
-          ]
-        },
-        {
-          id: 'specific-items',
-          type: 'checkbox',
-          label: 'Itens específicos',
-          options: [
-            { value: 'torneira', label: 'Torneira' },
-            { value: 'chuveiro', label: 'Chuveiro' },
-            { value: 'vaso-sanitario', label: 'Vaso sanitário' },
-            { value: 'pia', label: 'Pia' },
-            { value: 'canos', label: 'Canos/tubulação' },
-            { value: 'ralo', label: 'Ralo' },
-          ]
-        }
-      ]
-    },
-    {
-      id: 'urgency-details',
-      title: 'Urgência e Detalhes',
-      fields: [
-        {
-          id: 'urgency',
-          type: 'radio',
-          label: 'Qual a urgência?',
-          required: true,
-          options: [
-            { value: 'emergencia', label: 'Emergência - vazamento grave', price: 'Taxa urgência' },
-            { value: 'hoje', label: 'Preciso hoje' },
-            { value: 'amanha', label: 'Até amanhã' },
-            { value: 'semana', label: 'Esta semana' },
-            { value: 'flexivel', label: 'Posso aguardar' },
-          ]
-        },
-        {
-          id: 'problem-description',
-          type: 'textarea',
-          label: 'Descreva o problema',
-          required: true,
-          placeholder: 'Ex: Torneira pingando, água vazando pelo teto, vaso entupido...'
-        },
-        {
-          id: 'name',
-          type: 'text',
-          label: 'Seu nome',
-          required: true,
-        },
-        {
-          id: 'phone',
-          type: 'text',
-          label: 'WhatsApp',
-          required: true,
-        }
-      ]
-    }
-  ]
-};
-
-// Configuração para Eletricista (3233)
+// Configuração para Eletricista (3233) - Melhorada
 export const eletricistaConfig: MultistepConfig = {
   id: 'eletricista-service',
   title: 'Serviço Elétrico',
@@ -254,82 +390,163 @@ export const eletricistaConfig: MultistepConfig = {
   steps: [
     {
       id: 'service-type',
-      title: 'Que tipo de serviço elétrico?',
+      title: 'Que tipo de serviço elétrico você precisa?',
       fields: [
         {
           id: 'service-category',
           type: 'radio',
-          label: 'Categoria do serviço',
+          label: 'Tipo de serviço',
           required: true,
           options: [
-            { value: 'emergencia', label: 'Emergência - sem luz', badge: 'Urgente' },
+            { value: 'emergencia', label: 'Emergência - sem energia', badge: 'Urgente' },
             { value: 'instalacao', label: 'Instalação nova' },
-            { value: 'manutencao', label: 'Manutenção/reparo' },
-            { value: 'melhorias', label: 'Melhorias/upgrades' },
-          ]
-        }
-      ]
-    },
-    {
-      id: 'specific-service',
-      title: 'Serviços específicos',
-      fields: [
-        {
-          id: 'services-needed',
-          type: 'checkbox',
-          label: 'O que precisa ser feito?',
-          required: true,
-          options: [
-            { value: 'tomadas', label: 'Instalar/trocar tomadas' },
-            { value: 'interruptores', label: 'Instalar/trocar interruptores' },
-            { value: 'lampadas-lustres', label: 'Instalar lâmpadas/lustres' },
-            { value: 'chuveiro-eletrico', label: 'Instalar/trocar chuveiro elétrico' },
-            { value: 'quadro-eletrico', label: 'Quadro elétrico/disjuntores' },
-            { value: 'fiacao', label: 'Fiação/cabeamento' },
-            { value: 'ventilador-teto', label: 'Ventilador de teto' },
+            { value: 'manutencao', label: 'Manutenção e reparos' },
+            { value: 'melhorias', label: 'Melhorias e upgrades' },
+            { value: 'revisao', label: 'Revisão elétrica completa' },
           ]
         },
         {
-          id: 'problem-description',
+          id: 'additional-details',
           type: 'textarea',
-          label: 'Descreva o problema ou o que precisa',
-          required: true,
-          placeholder: 'Ex: Tomada sem energia, disjuntor desarmando, preciso instalar ar condicionado...'
+          label: 'Conte mais detalhes sobre o que precisa...',
+          placeholder: 'Ex: Tomada sem energia, disjuntor desarmando, preciso instalar ar condicionado, chuveiro elétrico...',
         }
       ]
     },
+
     {
-      id: 'location-urgency',
-      title: 'Local e Urgência',
+      id: 'property-type',
+      title: 'Qual é o tipo de imóvel?',
       fields: [
         {
-          id: 'property-type',
+          id: 'property-category',
           type: 'radio',
           label: 'Tipo de imóvel',
           required: true,
           options: [
             { value: 'apartamento', label: 'Apartamento' },
             { value: 'casa', label: 'Casa' },
-            { value: 'comercial', label: 'Comercial' },
+            { value: 'comercial', label: 'Comercial / escritório' },
+            { value: 'outro', label: 'Outro tipo' },
           ]
-        },
+        }
+      ]
+    },
+
+    {
+      id: 'problem-locations',
+      title: 'Em quais ambientes você precisa do serviço?',
+      fields: [
+        {
+          id: 'affected-locations',
+          type: 'checkbox',
+          label: 'Locais do serviço (multi-seleção)',
+          required: true,
+          options: [
+            { value: 'quartos', label: 'Quartos' },
+            { value: 'sala', label: 'Sala / áreas de convivência' },
+            { value: 'cozinha', label: 'Cozinha' },
+            { value: 'banheiros', label: 'Banheiros' },
+            { value: 'area-externa', label: 'Área externa / quintal' },
+            { value: 'toda-casa', label: 'Casa / apartamento todo' },
+            { value: 'outro', label: 'Outro local' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'specific-services',
+      title: 'Quais serviços específicos você precisa?',
+      fields: [
+        {
+          id: 'services-needed',
+          type: 'checkbox',
+          label: 'Serviços necessários (multi-seleção)',
+          required: true,
+          options: [
+            { value: 'tomadas', label: 'Instalar / trocar tomadas' },
+            { value: 'interruptores', label: 'Instalar / trocar interruptores' },
+            { value: 'lustres-lampadas', label: 'Instalar lustres / lâmpadas' },
+            { value: 'chuveiro-eletrico', label: 'Chuveiro elétrico' },
+            { value: 'ventilador-teto', label: 'Ventilador de teto' },
+            { value: 'quadro-eletrico', label: 'Quadro elétrico / disjuntores' },
+            { value: 'fiacao', label: 'Fiação / cabeamento' },
+            { value: 'outro', label: 'Outro serviço' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'material-preference',
+      title: 'Sobre materiais elétricos, como prefere?',
+      fields: [
+        {
+          id: 'material-included',
+          type: 'radio',
+          label: 'Fornecimento de material',
+          required: true,
+          options: [
+            { value: 'profissional-fornece', label: 'Profissional traz os materiais' },
+            { value: 'cliente-fornece', label: 'Eu forneço os materiais' },
+            { value: 'orcamento-separado', label: 'Orçar materiais separadamente' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'timing',
+      title: 'Para quando você precisa do serviço?',
+      fields: [
         {
           id: 'urgency',
           type: 'radio',
-          label: 'Urgência',
+          label: 'Urgência do serviço',
           required: true,
           options: [
-            { value: 'emergencia', label: 'Emergência - sem energia', price: 'Taxa urgência' },
-            { value: 'hoje', label: 'Hoje' },
+            { value: 'emergencia', label: 'Emergência - sem energia', badge: 'Taxa urgência' },
+            { value: 'hoje', label: 'Preciso hoje' },
             { value: 'amanha', label: 'Até amanhã' },
             { value: 'semana', label: 'Esta semana' },
-            { value: 'flexivel', label: 'Flexível' },
+            { value: 'flexivel', label: 'Flexível com datas' },
           ]
-        },
+        }
+      ]
+    },
+
+    {
+      id: 'project-stage',
+      title: 'Em que etapa você está?',
+      fields: [
+        {
+          id: 'stage',
+          type: 'radio',
+          label: 'Etapa do projeto',
+          required: true,
+          options: [
+            { value: 'pronto-contratar', label: 'Pronto para contratar' },
+            { value: 'planejando', label: 'Só planejando / fazendo orçamento' },
+          ]
+        }
+      ]
+    },
+
+    {
+      id: 'contact-data',
+      title: 'Quase lá! Só precisamos dos seus dados para conectar com eletricistas:',
+      fields: [
         {
           id: 'name',
           type: 'text',
-          label: 'Seu nome',
+          label: 'Nome',
+          required: true,
+        },
+        {
+          id: 'surname',
+          type: 'text',
+          label: 'Sobrenome',
           required: true,
         },
         {
@@ -337,6 +554,15 @@ export const eletricistaConfig: MultistepConfig = {
           type: 'text',
           label: 'WhatsApp',
           required: true,
+          placeholder: '(11) 99999-9999'
+        },
+        {
+          id: 'newsletter-opt-in',
+          type: 'checkbox',
+          label: 'Comunicações opcionais',
+          options: [
+            { value: 'tips-guides', label: 'Quero receber dicas de segurança elétrica no WhatsApp' },
+          ]
         }
       ]
     }

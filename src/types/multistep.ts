@@ -1,7 +1,7 @@
 // types/multistep.ts
 
 // Tipos de campo que o sistema suporta
-export type FieldType = 'radio' | 'checkbox' | 'text' | 'textarea' | 'select';
+export type FieldType = 'radio' | 'checkbox' | 'text' | 'textarea' | 'select' | 'phone';
 
 // Estrutura de uma opção (para radio, checkbox, select)
 export interface Option {

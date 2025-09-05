@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { PhoneInput } from '@/components/ui/PhoneInput';
 import { StepField } from '@/types/multistep';
 
 interface DynamicFieldProps {
@@ -40,7 +41,7 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
           {field.options?.map((option, i) => {
             const inputId = `${id}-${option.value}`;
             const checked = selectedValues.includes(option.value);
-            
+
             return (
               <div
                 key={option.value}
@@ -58,7 +59,7 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
                     <Checkbox
                       id={inputId}
                       checked={checked}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         toggleOption(option.value, checked === true)
                       }
                       className="after:absolute after:inset-0"
@@ -87,7 +88,7 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
 
   const renderRadioField = () => {
     const selectedValue = typeof value === 'string' ? value : '';
-
+    
     return (
       <fieldset className="space-y-2">
         <legend className="text-sm font-medium leading-none">
@@ -105,8 +106,10 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
             return (
               <div
                 key={option.value}
-                className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-accent relative flex flex-col gap-4 border p-4 outline-none first:rounded-t-md last:rounded-b-md has-data-[state=checked]:z-10"
-              >
+                // className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-accent relative flex flex-col gap-4 border p-4 outline-none first:rounded-t-md last:rounded-b-md has-data-[state=checked]:z-10"
+                className=" has-data-[state=checked]:bg-accent relative flex flex-col gap-4 border p-4 outline-none first:rounded-t-md last:rounded-b-md has-data-[state=checked]:z-10"
+
+           >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <RadioGroupItem
@@ -151,6 +154,21 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
     </div>
   );
 
+  const renderPhoneField = () => (
+    <div className="space-y-2">
+      <Label htmlFor={`${id}-phone`}>
+        {field.label}
+        {field.required && <span className="text-destructive ml-1">*</span>}
+      </Label>
+      <PhoneInput
+        value={typeof value === 'string' ? value : ''}
+        onChange={(value) => onChange(value)}
+        placeholder={field.placeholder}
+        required={field.required}
+      />
+    </div>
+  );
+
   const renderTextareaField = () => (
     <div className="space-y-2">
       <Label htmlFor={`${id}-textarea`}>
@@ -175,6 +193,8 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
       return renderRadioField();
     case 'text':
       return renderTextField();
+    case 'phone':
+      return renderPhoneField();
     case 'textarea':
       return renderTextareaField();
     default:

@@ -1,7 +1,15 @@
 // components/DynamicMultistep.tsx
 'use client'
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import {
+  Stepper,
+  StepperIndicator,
+  StepperItem,
+  StepperTitle,
+  StepperTrigger
+} from "@/components/ui/stepper";
 import { MultistepConfig, FormData } from '@/types/multistep';
 import { DynamicField } from '@/components/DynamicField';
 
@@ -11,10 +19,10 @@ interface DynamicMultistepProps {
   initialData?: FormData;
 }
 
-export function DynamicMultistep({ 
-  config, 
+export function DynamicMultistep({
+  config,
   onComplete,
-  initialData = {} 
+  initialData = {}
 }: DynamicMultistepProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialData);
@@ -35,12 +43,12 @@ export function DynamicMultistep({
 
   const validateStep = () => {
     const stepData = formData[currentStepConfig.id] || {};
-    
+
     for (const field of currentStepConfig.fields) {
       if (field.required && !stepData[field.id]) {
         return false;
       }
-      
+
       // Validação para checkbox (pelo menos uma opção)
       if (field.type === 'checkbox' && field.required) {
         const values = stepData[field.id] as string[];
@@ -49,7 +57,7 @@ export function DynamicMultistep({
         }
       }
     }
-    
+
     return true;
   };
 
@@ -71,24 +79,50 @@ export function DynamicMultistep({
   };
 
   const getFieldValue = (fieldId: string) => {
-    return formData[currentStepConfig.id]?.[fieldId] || 
-           (currentStepConfig.fields.find(f => f.id === fieldId)?.type === 'checkbox' ? [] : '');
+    return formData[currentStepConfig.id]?.[fieldId] ||
+      (currentStepConfig.fields.find(f => f.id === fieldId)?.type === 'checkbox' ? [] : '');
   };
 
+  // Convert config steps to stepper format
+  const stepperSteps = config.steps.map((step, index) => ({
+    step: index + 1,
+    title: step.title,
+  }));
+
   return (
-    <div className="space-y-6">
-      {/* Progress Indicator */}
-      <div className="flex justify-between text-sm text-muted-foreground">
-        <span>Passo {currentStep + 1} de {config.steps.length}</span>
-        <span>{Math.round(((currentStep + 1) / config.steps.length) * 100)}%</span>
-      </div>
-      
-      {/* Progress Bar */}
-      <div className="w-full bg-secondary rounded-full h-2">
-        <div 
-          className="bg-primary h-2 rounded-full transition-all duration-300"
-          style={{ width: `${((currentStep + 1) / config.steps.length) * 100}%` }}
-        />
+    <div className="space-y-8">
+      {/* OriginUI Stepper - Horizontal Progress Bar Style */}
+      <div className="mx-auto max-w-4xl space-y-4 text-center hidden">
+        {/* <Stepper value={currentStep + 1} className="items-start gap-4">
+          {stepperSteps.map(({ step, title }, index) => (
+            <StepperItem key={step} step={step} className="flex-1">
+              <StepperTrigger 
+                className="w-full flex-col items-start gap-2 rounded cursor-pointer"
+                onClick={() => {
+                  // Allow navigation to previous steps only
+                  if (index < currentStep) {
+                    setCurrentStep(index);
+                  }
+                }}
+                disabled={index > currentStep}
+              >
+                <StepperIndicator asChild className="bg-border h-1 w-full">
+                  <span className="sr-only">{step}</span>
+                </StepperIndicator>
+                <div className="space-y-0.5">
+                  <StepperTitle className="text-sm font-medium">
+                    {title}
+                  </StepperTitle>
+                </div>
+              </StepperTrigger>
+            </StepperItem>
+          ))}
+        </Stepper> */}
+
+        {/* Progress percentage */}
+        {/* <p className="text-muted-foreground mt-2 text-xs" role="region" aria-live="polite">
+          {Math.round(((currentStep + 1) / config.steps.length) * 100)}% concluído
+        </p> */}
       </div>
 
       {/* Step Content */}
@@ -114,15 +148,15 @@ export function DynamicMultistep({
 
       {/* Navigation */}
       <div className="flex justify-between gap-4 pt-4">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={handlePrevious}
           disabled={isFirstStep}
           className="flex-1"
         >
           Voltar
         </Button>
-        <Button 
+        <Button
           onClick={handleNext}
           className="flex-1"
         >
