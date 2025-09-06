@@ -1,4 +1,4 @@
-// components/DynamicMultistep.tsx
+// components/DynamicMultistep.tsx - VERSÃO SIMPLIFICADA
 'use client'
 
 import { useState } from 'react';
@@ -12,7 +12,9 @@ import {
 } from "@/components/ui/stepper";
 import { MultistepConfig, FormData } from '@/types/multistep';
 import { DynamicField } from '@/components/DynamicField';
-import { LoadingStep } from '@/components/LoadingStep'
+import { LoadingStep } from '@/components/LoadingStep';
+import { getStepHeaderComponent, DefaultStepHeader } from '@/components/StepHeaders';
+import { useFormSubmission } from '@/hooks/useFormSubmission'; // 👈 ÚNICA ADIÇÃO
 
 interface DynamicMultistepProps {
   config: MultistepConfig;
@@ -27,6 +29,9 @@ export function DynamicMultistep({
 }: DynamicMultistepProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialData);
+  
+  // 👈 ÚNICA ADIÇÃO - Hook do Supabase
+  const { submitForm, loading: submissionLoading, error: submissionError } = useFormSubmission();
 
   const currentStepConfig = config.steps[currentStep];
   const isFirstStep = currentStep === 0;
@@ -67,14 +72,34 @@ export function DynamicMultistep({
     return true;
   };
 
-  const handleNext = () => {
+  // 👈 ÚNICA MUDANÇA PRINCIPAL - handleNext agora salva no Supabase
+  const handleNext = async () => {
     if (!validateStep()) {
       alert('Por favor, preencha todos os campos obrigatórios');
       return;
     }
 
     if (isLastStep) {
-      onComplete?.(formData);
+      // Verificar se category existe
+      if (!config.category) {
+        alert('❌ Erro: Categoria do serviço não encontrada');
+        return;
+      }
+
+      // 👈 SALVAR NO SUPABASE
+      const result = await submitForm({
+        categoryId: config.category,
+        formData
+      });
+
+      if (result.success) {
+        // Sucesso - chamar callback original
+        onComplete?.(formData);
+        console.log('✅ Formulário salvo no Supabase!', result.data);
+      } else {
+        // Erro - mostrar para o usuário
+        alert(`❌ Erro: ${result.error}`);
+      }
     } else {
       setCurrentStep(prev => prev + 1);
     }
@@ -104,44 +129,30 @@ export function DynamicMultistep({
     title: step.title,
   }));
 
+  // Renderizar header customizado
+  const renderStepHeader = () => {
+    // Primeiro tenta buscar componente customizado
+    if (currentStepConfig.headerComponent) {
+      const CustomHeaderComponent = getStepHeaderComponent(currentStepConfig.headerComponent);
+      if (CustomHeaderComponent) {
+        return <CustomHeaderComponent />;
+      }
+    }
+    
+    // Fallback para header padrão
+    return (
+      <DefaultStepHeader 
+        title={currentStepConfig.title} 
+        subtitle={currentStepConfig.subtitle}
+      />
+    );
+  };
+
   // Se for step de loading, renderiza componente especial
   if (currentStepConfig.type === 'loading') {
     return (
-      <div className="space-y-8">
-        {/* OriginUI Stepper - Horizontal Progress Bar Style */}
-        <div className="mx-auto max-w-4xl space-y-4 text-center hidden">
-          {/* <Stepper value={currentStep + 1} className="items-start gap-4">
-            {stepperSteps.map(({ step, title }, index) => (
-              <StepperItem key={step} step={step} className="flex-1">
-                <StepperTrigger 
-                  className="w-full flex-col items-start gap-2 rounded cursor-pointer"
-                  onClick={() => {
-                    // Allow navigation to previous steps only
-                    if (index < currentStep) {
-                      setCurrentStep(index);
-                    }
-                  }}
-                  disabled={index > currentStep}
-                >
-                  <StepperIndicator asChild className="bg-border h-1 w-full">
-                    <span className="sr-only">{step}</span>
-                  </StepperIndicator>
-                  <div className="space-y-0.5">
-                    <StepperTitle className="text-sm font-medium">
-                      {title}
-                    </StepperTitle>
-                  </div>
-                </StepperTrigger>
-              </StepperItem>
-            ))}
-          </Stepper> */}
-
-          {/* Progress percentage */}
-          {/* <p className="text-muted-foreground mt-2 text-xs" role="region" aria-live="polite">
-            {Math.round(((currentStep + 1) / config.steps.length) * 100)}% concluído
-          </p> */}
-        </div>
-
+      <div className="p-6 bg-white rounded-[8px] shadow-lg">
+        {renderStepHeader()}
         <LoadingStep
           onComplete={goToNextStep}
           duration={currentStepConfig.duration || 5000}
@@ -151,78 +162,61 @@ export function DynamicMultistep({
   }
 
   return (
-    <div className="space-y-8">
-      {/* OriginUI Stepper - Horizontal Progress Bar Style */}
-      <div className="mx-auto max-w-4xl space-y-4 text-center hidden">
-        {/* <Stepper value={currentStep + 1} className="items-start gap-4">
-          {stepperSteps.map(({ step, title }, index) => (
-            <StepperItem key={step} step={step} className="flex-1">
-              <StepperTrigger 
-                className="w-full flex-col items-start gap-2 rounded cursor-pointer"
-                onClick={() => {
-                  // Allow navigation to previous steps only
-                  if (index < currentStep) {
-                    setCurrentStep(index);
-                  }
-                }}
-                disabled={index > currentStep}
-              >
-                <StepperIndicator asChild className="bg-border h-1 w-full">
-                  <span className="sr-only">{step}</span>
-                </StepperIndicator>
-                <div className="space-y-0.5">
-                  <StepperTitle className="text-sm font-medium">
-                    {title}
-                  </StepperTitle>
-                </div>
-              </StepperTrigger>
-            </StepperItem>
-          ))}
-        </Stepper> */}
+    <div>
+      {renderStepHeader()}
+      <div className="p-6 bg-white rounded-[8px] shadow-lg">
+        {/* 👈 Mostrar erro de submissão se houver */}
+        {submissionError && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            ❌ {submissionError}
+          </div>
+        )}
 
-        {/* Progress percentage */}
-        {/* <p className="text-muted-foreground mt-2 text-xs" role="region" aria-live="polite">
-          {Math.round(((currentStep + 1) / config.steps.length) * 100)}% concluído
-        </p> */}
-      </div>
-
-      {/* Step Content */}
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-xl font-semibold">{currentStepConfig.title}</h2>
-          {currentStepConfig.description && (
-            <p className="text-muted-foreground mt-2">{currentStepConfig.description}</p>
-          )}
+        {/* OriginUI Stepper - Horizontal Progress Bar Style */}
+        <div className="mx-auto max-w-4xl space-y-4 text-center hidden">
+          {/* Progress percentage */}
         </div>
 
-        <div className="space-y-4">
-          {currentStepConfig.fields.map(field => (
-            <DynamicField
-              key={field.id}
-              field={field}
-              value={getFieldValue(field.id)}
-              onChange={(value) => handleFieldChange(field.id, value)}
-            />
-          ))}
+        {/* Step Content */}
+        <div className="space-y-6">
+          <div className="space-y-4">
+            {currentStepConfig.fields.map(field => (
+              <DynamicField
+                key={field.id}
+                field={field}
+                value={getFieldValue(field.id)}
+                onChange={(value) => handleFieldChange(field.id, value)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Navigation */}
-      <div className="flex justify-between gap-4 pt-4">
-        <Button
-          variant="outline"
-          onClick={handlePrevious}
-          disabled={isFirstStep}
-          className="flex-1"
-        >
-          Voltar
-        </Button>
-        <Button
-          onClick={handleNext}
-          className="flex-1"
-        >
-          {isLastStep ? 'Finalizar' : 'Próximo'}
-        </Button>
+        {/* Navigation */}
+        <div className="flex justify-between gap-4 pt-4">
+          <Button
+            variant="outline"
+            onClick={handlePrevious}
+            disabled={isFirstStep || submissionLoading} // 👈 Desabilitar durante submit
+            className="flex-1"
+          >
+            Voltar
+          </Button>
+          <Button
+            onClick={handleNext}
+            disabled={submissionLoading} // 👈 Desabilitar durante submit
+            className="flex-1"
+          >
+            {/* 👈 Mostrar loading */}
+            {submissionLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                Salvando...
+              </div>
+            ) : (
+              isLastStep ? 'Finalizar' : 'Próximo'
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );

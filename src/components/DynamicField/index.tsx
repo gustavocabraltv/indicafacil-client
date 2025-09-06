@@ -33,10 +33,10 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
 
     return (
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium leading-none">
+        {/* <legend className="text-sm font-medium leading-none">
           {field.label}
           {field.required && <span className="text-destructive ml-1">*</span>}
-        </legend>
+        </legend> */}
         <div className="gap-0 -space-y-px rounded-md shadow-xs">
           {field.options?.map((option, i) => {
             const inputId = `${id}-${option.value}`;
@@ -91,10 +91,10 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
     
     return (
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium leading-none">
+        {/* <legend className="text-sm font-medium leading-none">
           {field.label}
           {field.required && <span className="text-destructive ml-1">*</span>}
-        </legend>
+        </legend> */}
         <RadioGroup
           value={selectedValue}
           onValueChange={(value) => onChange(value)}

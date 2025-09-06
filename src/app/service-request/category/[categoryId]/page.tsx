@@ -64,19 +64,19 @@ export default function CategoryPage() {
             ← Voltar para categorias
           </button>
 
-          <div className="flex items-center gap-3 mb-2">
+          {/* <div className="flex items-center gap-3 mb-2">
             <span className="text-2xl">{categoryInfo.icon}</span>
             <h1 className="text-2xl font-bold">
               Serviço de {categoryInfo.name}
             </h1>
-          </div>
+          </div> */}
 
-          <p className="text-muted-foreground text-sm">
+          {/* <p className="text-muted-foreground text-sm">
             Preencha as informações para receber orçamentos de profissionais qualificados
-          </p>
+          </p> */}
         </div>
 
-        <div className="p-6 bg-white rounded-[8px] shadow-lg">
+        <div>
           <DynamicMultistep
             config={config}
             onComplete={handleComplete}

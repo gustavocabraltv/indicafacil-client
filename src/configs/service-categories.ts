@@ -164,7 +164,7 @@ export const pinturaConfig: MultistepConfig = {
         // NOVO STEP DE LOADING
         {
           id: 'searching-professionals',
-          title: 'Buscando Profissionais...',
+          title: '',
           type: 'loading', // Tipo especial para loading
           fields: [], // Sem campos
           autoAdvance: true, // Avança automaticamente
@@ -175,6 +175,7 @@ export const pinturaConfig: MultistepConfig = {
     {
       id: 'contact-data',
       title: 'Quase lá! Só precisamos dos seus dados para enviar os orçamentos:',
+      headerComponent: 'contact-data',
       fields: [
         {
           id: 'name',
@@ -200,7 +201,7 @@ export const pinturaConfig: MultistepConfig = {
           type: 'checkbox',
           label: 'Comunicações opcionais',
           options: [
-            { value: 'tips-guides', label: 'Quero receber dicas e guias de pintura no WhatsApp' },
+            { value: 'tips-guides', label: 'Quero receber orçamentos pelo WhatsApp' },
           ]
         }
       ]
@@ -358,8 +359,17 @@ export const encanadorConfig: MultistepConfig = {
     },
 
     {
+      id: 'searching-professionals',
+      title: 'Buscando Profissionais...',
+      type: 'loading', // Tipo especial para loading
+      fields: [], // Sem campos
+      autoAdvance: true, // Avança automaticamente
+      duration: 5000 // 5 segundos
+    },
+
+    {
       id: 'contact-data',
-      title: 'Quase lá! Só precisamos dos seus dados para conectar com encanadores:',
+      title: 'Quase lá! Só precisamos dos seus dados para enviar os orçamentos:',
       fields: [
         {
           id: 'name',
@@ -367,15 +377,15 @@ export const encanadorConfig: MultistepConfig = {
           label: 'Nome',
           required: true,
         },
-        {
-          id: 'surname',
-          type: 'text',
-          label: 'Sobrenome',
-          required: true,
-        },
+        // {
+        //   id: 'surname',
+        //   type: 'text',
+        //   label: 'Sobrenome',
+        //   required: true,
+        // },
         {
           id: 'phone',
-          type: 'text',
+          type: 'phone',
           label: 'WhatsApp',
           required: true,
           placeholder: '(11) 99999-9999'
@@ -385,7 +395,7 @@ export const encanadorConfig: MultistepConfig = {
           type: 'checkbox',
           label: 'Comunicações opcionais',
           options: [
-            { value: 'tips-guides', label: 'Quero receber dicas de manutenção hidráulica no WhatsApp' },
+            { value: 'tips-guides', label: 'Quero receber orçamentos pelo WhatsApp' },
           ]
         }
       ]
@@ -545,8 +555,17 @@ export const eletricistaConfig: MultistepConfig = {
     },
 
     {
+      id: 'searching-professionals',
+      title: 'Buscando Profissionais...',
+      type: 'loading', // Tipo especial para loading
+      fields: [], // Sem campos
+      autoAdvance: true, // Avança automaticamente
+      duration: 5000 // 5 segundos
+    },
+
+    {
       id: 'contact-data',
-      title: 'Quase lá! Só precisamos dos seus dados para conectar com eletricistas:',
+      title: 'Quase lá! Só precisamos dos seus dados para enviar os orçamentos:',
       fields: [
         {
           id: 'name',
@@ -554,15 +573,15 @@ export const eletricistaConfig: MultistepConfig = {
           label: 'Nome',
           required: true,
         },
-        {
-          id: 'surname',
-          type: 'text',
-          label: 'Sobrenome',
-          required: true,
-        },
+        // {
+        //   id: 'surname',
+        //   type: 'text',
+        //   label: 'Sobrenome',
+        //   required: true,
+        // },
         {
           id: 'phone',
-          type: 'text',
+          type: 'phone',
           label: 'WhatsApp',
           required: true,
           placeholder: '(11) 99999-9999'
@@ -572,7 +591,7 @@ export const eletricistaConfig: MultistepConfig = {
           type: 'checkbox',
           label: 'Comunicações opcionais',
           options: [
-            { value: 'tips-guides', label: 'Quero receber dicas de segurança elétrica no WhatsApp' },
+            { value: 'tips-guides', label: 'Quero receber orçamentos pelo WhatsApp' },
           ]
         }
       ]

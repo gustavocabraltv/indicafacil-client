@@ -1,7 +1,7 @@
 // components/LoadingStep.tsx
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface LoadingStepProps {
   onComplete: () => void
@@ -9,12 +9,23 @@ interface LoadingStepProps {
 }
 
 export const LoadingStep = ({ onComplete, duration = 5000 }: LoadingStepProps) => {
+  const [showSecondMessage, setShowSecondMessage] = useState(false)
+
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // Troca a mensagem após 2 segundos
+    const messageTimer = setTimeout(() => {
+      setShowSecondMessage(true)
+    }, 2000)
+
+    // Completa o loading após a duração total
+    const completeTimer = setTimeout(() => {
       onComplete()
     }, duration)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(messageTimer)
+      clearTimeout(completeTimer)
+    }
   }, [onComplete, duration])
 
   return (
@@ -29,7 +40,10 @@ export const LoadingStep = ({ onComplete, duration = 5000 }: LoadingStepProps) =
       </h3>
       
       <p className="text-muted-foreground">
-        Separando os melhores profissionais para você
+        {showSecondMessage 
+          ? "Aguarde mais alguns segundos" 
+          : "Buscando profissionais perto de você"
+        }
       </p>
     </div>
   )
