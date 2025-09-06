@@ -33,6 +33,10 @@ export interface Step {
   title: string;                 // Título que aparece no topo
   description?: string;          // Descrição opcional do step
   fields: StepField[];           // Array com os campos deste step
+  type?: 'form' | 'loading'; // Novo campo
+  autoAdvance?: boolean; // Para steps que avançam automaticamente
+  duration?: number; // Duração do loading em ms
+
 }
 
 // Configuração completa do multistep

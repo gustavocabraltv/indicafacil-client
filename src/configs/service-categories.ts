@@ -161,6 +161,17 @@ export const pinturaConfig: MultistepConfig = {
       ]
     },
 
+        // NOVO STEP DE LOADING
+        {
+          id: 'searching-professionals',
+          title: 'Buscando Profissionais...',
+          type: 'loading', // Tipo especial para loading
+          fields: [], // Sem campos
+          autoAdvance: true, // Avança automaticamente
+          duration: 5000 // 5 segundos
+        },
+    
+
     {
       id: 'contact-data',
       title: 'Quase lá! Só precisamos dos seus dados para enviar os orçamentos:',

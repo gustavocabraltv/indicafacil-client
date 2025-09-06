@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/stepper";
 import { MultistepConfig, FormData } from '@/types/multistep';
 import { DynamicField } from '@/components/DynamicField';
+import { LoadingStep } from '@/components/LoadingStep'
 
 interface DynamicMultistepProps {
   config: MultistepConfig;
@@ -42,6 +43,11 @@ export function DynamicMultistep({
   };
 
   const validateStep = () => {
+    // Skip validation for loading steps
+    if (currentStepConfig.type === 'loading') {
+      return true;
+    }
+
     const stepData = formData[currentStepConfig.id] || {};
 
     for (const field of currentStepConfig.fields) {
@@ -83,11 +89,66 @@ export function DynamicMultistep({
       (currentStepConfig.fields.find(f => f.id === fieldId)?.type === 'checkbox' ? [] : '');
   };
 
+  // Função para avançar step (usado pelo LoadingStep)
+  const goToNextStep = () => {
+    if (isLastStep) {
+      onComplete?.(formData);
+    } else {
+      setCurrentStep(prev => prev + 1);
+    }
+  };
+
   // Convert config steps to stepper format
   const stepperSteps = config.steps.map((step, index) => ({
     step: index + 1,
     title: step.title,
   }));
+
+  // Se for step de loading, renderiza componente especial
+  if (currentStepConfig.type === 'loading') {
+    return (
+      <div className="space-y-8">
+        {/* OriginUI Stepper - Horizontal Progress Bar Style */}
+        <div className="mx-auto max-w-4xl space-y-4 text-center hidden">
+          {/* <Stepper value={currentStep + 1} className="items-start gap-4">
+            {stepperSteps.map(({ step, title }, index) => (
+              <StepperItem key={step} step={step} className="flex-1">
+                <StepperTrigger 
+                  className="w-full flex-col items-start gap-2 rounded cursor-pointer"
+                  onClick={() => {
+                    // Allow navigation to previous steps only
+                    if (index < currentStep) {
+                      setCurrentStep(index);
+                    }
+                  }}
+                  disabled={index > currentStep}
+                >
+                  <StepperIndicator asChild className="bg-border h-1 w-full">
+                    <span className="sr-only">{step}</span>
+                  </StepperIndicator>
+                  <div className="space-y-0.5">
+                    <StepperTitle className="text-sm font-medium">
+                      {title}
+                    </StepperTitle>
+                  </div>
+                </StepperTrigger>
+              </StepperItem>
+            ))}
+          </Stepper> */}
+
+          {/* Progress percentage */}
+          {/* <p className="text-muted-foreground mt-2 text-xs" role="region" aria-live="polite">
+            {Math.round(((currentStep + 1) / config.steps.length) * 100)}% concluído
+          </p> */}
+        </div>
+
+        <LoadingStep
+          onComplete={goToNextStep}
+          duration={currentStepConfig.duration || 5000}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
