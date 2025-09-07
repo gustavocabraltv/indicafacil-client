@@ -1,7 +1,6 @@
 // components/DynamicMultistep.tsx - COM TRANSIÇÕES SUAVES CORRIGIDAS
 'use client'
 
-
 import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { MultistepConfig, FormData, getVisibleSteps, getNextStepId } from '@/types/multistep';
@@ -10,15 +9,12 @@ import { LoadingStep } from '@/components/LoadingStep';
 import { getStepHeaderComponent, DefaultStepHeader } from '@/components/StepHeaders';
 import { useFormSubmission } from '@/hooks/useFormSubmission';
 import { useMultistepProgress } from '@/contexts/MultistepProgressContext';
-import Image from 'next/image'
-
 
 interface DynamicMultistepProps {
   config: MultistepConfig;
   onComplete?: (data: FormData) => void;
   initialData?: FormData;
 }
-
 
 export function DynamicMultistep({
   config,
@@ -32,16 +28,13 @@ export function DynamicMultistep({
   const [transitionDirection, setTransitionDirection] = useState<'forward' | 'backward'>('forward');
   const [previousStepId, setPreviousStepId] = useState<string>('');
 
-
   const { submitForm, loading: submissionLoading, error: submissionError } = useFormSubmission();
   const { updateProgress } = useMultistepProgress();
-
 
   // CALCULAR STEPS VISÍVEIS BASEADO NAS RESPOSTAS
   const visibleSteps = useMemo(() => {
     return getVisibleSteps(config.steps, formData);
   }, [config.steps, formData]);
-
 
   // ENCONTRAR STEP ATUAL ENTRE OS VISÍVEIS
   const currentStepIndex = visibleSteps.findIndex(step => step.id === currentStepId);
@@ -49,11 +42,9 @@ export function DynamicMultistep({
   // ENCONTRAR STEP ANTERIOR PARA TRANSIÇÃO
   const previousStepConfig = visibleSteps.find(step => step.id === previousStepId);
 
-
   // NAVEGAÇÃO BASEADA EM STEPS VISÍVEIS
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === visibleSteps.length - 1;
-
 
   // ATUALIZAR PROGRESSO NO CONTEXTO SEMPRE QUE MUDAR
   useEffect(() => {
@@ -65,7 +56,6 @@ export function DynamicMultistep({
       );
     }
   }, [currentStepIndex, visibleSteps.length, currentStepConfig?.title, updateProgress]);
-
 
   // FUNÇÃO PARA TRANSIÇÃO ENTRE STEPS - SISTEMA DE DOIS CONTAINERS COM DELAY CORRETO
   const transitionToStep = (newStepId: string, direction: 'forward' | 'backward') => {
@@ -83,7 +73,6 @@ export function DynamicMultistep({
     }, 900);
   };
 
-
   const handleFieldChange = (fieldId: string, value: string | string[]) => {
     setFormData(prev => ({
       ...prev,
@@ -94,22 +83,18 @@ export function DynamicMultistep({
     }));
   };
 
-
   const validateStep = () => {
     // Skip validation for loading steps
     if (currentStepConfig.type === 'loading') {
       return true;
     }
 
-
     const stepData = formData[currentStepConfig.id] || {};
-
 
     for (const field of currentStepConfig.fields) {
       if (field.required && !stepData[field.id]) {
         return false;
       }
-
 
       // Validação para checkbox (pelo menos uma opção)
       if (field.type === 'checkbox' && field.required) {
@@ -120,10 +105,8 @@ export function DynamicMultistep({
       }
     }
 
-
     return true;
   };
-
 
   // NAVEGAÇÃO INTELIGENTE PARA PRÓXIMO STEP - COM LÓGICA PARA ÚLTIMO STEP
   const handleNext = async () => {
@@ -132,7 +115,6 @@ export function DynamicMultistep({
       return;
     }
 
-
     if (isLastStep) {
       // Verificar se category existe
       if (!config.category) {
@@ -140,13 +122,11 @@ export function DynamicMultistep({
         return;
       }
 
-
       // Salvar no Supabase
       const result = await submitForm({
         categoryId: config.category,
         formData
       });
-
 
       if (result.success) {
         onComplete?.(formData);
@@ -157,7 +137,6 @@ export function DynamicMultistep({
     } else {
       // USAR LÓGICA CONDICIONAL PARA PRÓXIMO STEP COM TRANSIÇÃO
       const nextStepId = getNextStepId(config, currentStepId, formData);
-
 
       if (nextStepId) {
         // Verificar se o próximo step é o último - se for, não fazer transição
@@ -178,7 +157,6 @@ export function DynamicMultistep({
     }
   };
 
-
   // NAVEGAÇÃO INTELIGENTE PARA STEP ANTERIOR
   const handlePrevious = () => {
     if (!isFirstStep) {
@@ -189,12 +167,10 @@ export function DynamicMultistep({
     }
   };
 
-
   const getFieldValue = (fieldId: string, stepId: string = currentStepConfig.id) => {
     return formData[stepId]?.[fieldId] ||
       (visibleSteps.find(s => s.id === stepId)?.fields.find(f => f.id === fieldId)?.type === 'checkbox' ? [] : '');
   };
-
 
   // Função para avançar step (usado pelo LoadingStep) - COM LÓGICA PARA ÚLTIMO STEP
   const goToNextStep = () => {
@@ -220,7 +196,6 @@ export function DynamicMultistep({
     }
   };
 
-
   // VERIFICAÇÃO DE SEGURANÇA
   if (!currentStepConfig) {
     console.error('Step atual não encontrado:', currentStepId);
@@ -233,7 +208,6 @@ export function DynamicMultistep({
     );
   }
 
-
   // Renderizar header customizado
   const renderStepHeader = () => {
     if (currentStepConfig.headerComponent) {
@@ -242,7 +216,6 @@ export function DynamicMultistep({
         return <CustomHeaderComponent />;
       }
     }
-
 
     return (
       <DefaultStepHeader
@@ -271,9 +244,8 @@ export function DynamicMultistep({
     );
   };
 
-
   // FUNÇÃO PARA RENDERIZAR O CONTEÚDO DE UM STEP
-  const renderStepContent = (stepConfig: any, stepId: string) => {
+  const renderStepContent = (stepConfig: typeof currentStepConfig, stepId: string) => {
     if (stepConfig.type === 'loading') {
       return (
         <LoadingStep
@@ -283,11 +255,10 @@ export function DynamicMultistep({
       );
     }
 
-
     return (
       <div className="space-y-6">
         <div className="space-y-4">
-          {stepConfig.fields.map((field: any) => (
+          {stepConfig.fields.map((field) => (
             <DynamicField
               key={field.id}
               field={field}
@@ -299,7 +270,6 @@ export function DynamicMultistep({
       </div>
     );
   };
-
 
   // Se for step de loading, renderiza componente especial
   if (currentStepConfig.type === 'loading' && !isTransitioning) {
@@ -315,7 +285,6 @@ export function DynamicMultistep({
       </div>
     );
   }
-
 
   // CLASSES PARA TRANSIÇÃO DO HEADER ATUAL
   const getHeaderClasses = () => {
@@ -356,7 +325,6 @@ export function DynamicMultistep({
     }
   };
 
-
   // CLASSES PARA TRANSIÇÃO DO STEP ATUAL (entrando) - COM DELAY
   const getCurrentStepClasses = () => {
     if (!isTransitioning) {
@@ -371,7 +339,6 @@ export function DynamicMultistep({
       return `${baseClasses} slide-in-from-left-delayed`;
     }
   };
-
 
   return (
     <div>
@@ -479,9 +446,7 @@ export function DynamicMultistep({
             </div>
           )}
 
-
           {renderStepContent(currentStepConfig, currentStepId)}
-
 
           <div className="flex justify-between gap-4 pt-4 mt-6">
             <Button
