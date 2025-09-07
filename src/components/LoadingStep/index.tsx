@@ -8,14 +8,14 @@ interface LoadingStepProps {
   duration?: number
 }
 
-export const LoadingStep = ({ onComplete, duration = 5000 }: LoadingStepProps) => {
+export const LoadingStep = ({ onComplete, duration = 3000 }: LoadingStepProps) => {
   const [showSecondMessage, setShowSecondMessage] = useState(false)
 
   useEffect(() => {
     // Troca a mensagem após 2 segundos
     const messageTimer = setTimeout(() => {
       setShowSecondMessage(true)
-    }, 2000)
+    }, 1000)
 
     // Completa o loading após a duração total
     const completeTimer = setTimeout(() => {

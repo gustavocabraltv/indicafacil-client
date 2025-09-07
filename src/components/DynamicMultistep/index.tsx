@@ -1,20 +1,15 @@
-// components/DynamicMultistep.tsx - VERSÃO SIMPLIFICADA
+// components/DynamicMultistep.tsx - ATUALIZADO COM CONTEXT
 'use client'
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Stepper,
-  StepperIndicator,
-  StepperItem,
-  StepperTitle,
-  StepperTrigger
-} from "@/components/ui/stepper";
-import { MultistepConfig, FormData } from '@/types/multistep';
+import { MultistepConfig, FormData, getVisibleSteps, getNextStepId } from '@/types/multistep';
 import { DynamicField } from '@/components/DynamicField';
 import { LoadingStep } from '@/components/LoadingStep';
 import { getStepHeaderComponent, DefaultStepHeader } from '@/components/StepHeaders';
-import { useFormSubmission } from '@/hooks/useFormSubmission'; // 👈 ÚNICA ADIÇÃO
+import { useFormSubmission } from '@/hooks/useFormSubmission';
+import { useMultistepProgress } from '@/contexts/MultistepProgressContext'; // 🆕
+import Image from 'next/image'
 
 interface DynamicMultistepProps {
   config: MultistepConfig;
@@ -27,15 +22,35 @@ export function DynamicMultistep({
   onComplete,
   initialData = {}
 }: DynamicMultistepProps) {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStepId, setCurrentStepId] = useState(config.steps[0]?.id || '');
   const [formData, setFormData] = useState<FormData>(initialData);
-  
-  // 👈 ÚNICA ADIÇÃO - Hook do Supabase
-  const { submitForm, loading: submissionLoading, error: submissionError } = useFormSubmission();
 
-  const currentStepConfig = config.steps[currentStep];
-  const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === config.steps.length - 1;
+  const { submitForm, loading: submissionLoading, error: submissionError } = useFormSubmission();
+  const { updateProgress } = useMultistepProgress(); // 🆕
+
+  // CALCULAR STEPS VISÍVEIS BASEADO NAS RESPOSTAS
+  const visibleSteps = useMemo(() => {
+    return getVisibleSteps(config.steps, formData);
+  }, [config.steps, formData]);
+
+  // ENCONTRAR STEP ATUAL ENTRE OS VISÍVEIS
+  const currentStepIndex = visibleSteps.findIndex(step => step.id === currentStepId);
+  const currentStepConfig = visibleSteps[currentStepIndex];
+
+  // NAVEGAÇÃO BASEADA EM STEPS VISÍVEIS
+  const isFirstStep = currentStepIndex === 0;
+  const isLastStep = currentStepIndex === visibleSteps.length - 1;
+
+  // 🆕 ATUALIZAR PROGRESSO NO CONTEXTO SEMPRE QUE MUDAR
+  useEffect(() => {
+    if (visibleSteps.length > 0 && currentStepConfig) {
+      updateProgress(
+        currentStepIndex,
+        visibleSteps.length,
+        currentStepConfig.title
+      );
+    }
+  }, [currentStepIndex, visibleSteps.length, currentStepConfig?.title, updateProgress]);
 
   const handleFieldChange = (fieldId: string, value: string | string[]) => {
     setFormData(prev => ({
@@ -72,7 +87,7 @@ export function DynamicMultistep({
     return true;
   };
 
-  // 👈 ÚNICA MUDANÇA PRINCIPAL - handleNext agora salva no Supabase
+  // NAVEGAÇÃO INTELIGENTE PARA PRÓXIMO STEP
   const handleNext = async () => {
     if (!validateStep()) {
       alert('Por favor, preencha todos os campos obrigatórios');
@@ -82,31 +97,43 @@ export function DynamicMultistep({
     if (isLastStep) {
       // Verificar se category existe
       if (!config.category) {
-        alert('❌ Erro: Categoria do serviço não encontrada');
+        alert('Erro: Categoria do serviço não encontrada');
         return;
       }
 
-      // 👈 SALVAR NO SUPABASE
+      // Salvar no Supabase
       const result = await submitForm({
         categoryId: config.category,
         formData
       });
 
       if (result.success) {
-        // Sucesso - chamar callback original
         onComplete?.(formData);
-        console.log('✅ Formulário salvo no Supabase!', result.data);
+        console.log('Formulário salvo no Supabase!', result.data);
       } else {
-        // Erro - mostrar para o usuário
-        alert(`❌ Erro: ${result.error}`);
+        alert(`Erro: ${result.error}`);
       }
     } else {
-      setCurrentStep(prev => prev + 1);
+      // USAR LÓGICA CONDICIONAL PARA PRÓXIMO STEP
+      const nextStepId = getNextStepId(config, currentStepId, formData);
+
+      if (nextStepId) {
+        setCurrentStepId(nextStepId);
+      } else {
+        // Se não há próximo step, finalizar
+        onComplete?.(formData);
+      }
     }
   };
 
+  // NAVEGAÇÃO INTELIGENTE PARA STEP ANTERIOR
   const handlePrevious = () => {
-    setCurrentStep(prev => prev - 1);
+    if (!isFirstStep) {
+      const previousStepId = visibleSteps[currentStepIndex - 1]?.id;
+      if (previousStepId) {
+        setCurrentStepId(previousStepId);
+      }
+    }
   };
 
   const getFieldValue = (fieldId: string) => {
@@ -119,30 +146,39 @@ export function DynamicMultistep({
     if (isLastStep) {
       onComplete?.(formData);
     } else {
-      setCurrentStep(prev => prev + 1);
+      const nextStepId = getNextStepId(config, currentStepId, formData);
+      if (nextStepId) {
+        setCurrentStepId(nextStepId);
+      } else {
+        onComplete?.(formData);
+      }
     }
   };
 
-  // Convert config steps to stepper format
-  const stepperSteps = config.steps.map((step, index) => ({
-    step: index + 1,
-    title: step.title,
-  }));
+  // VERIFICAÇÃO DE SEGURANÇA
+  if (!currentStepConfig) {
+    console.error('Step atual não encontrado:', currentStepId);
+    console.log('Steps visíveis:', visibleSteps.map(s => s.id));
+    console.log('FormData atual:', formData);
+    return (
+      <div className="p-6 bg-red-100 border border-red-400 text-red-700 rounded">
+        Erro: Step não encontrado. Recarregue a página.
+      </div>
+    );
+  }
 
   // Renderizar header customizado
   const renderStepHeader = () => {
-    // Primeiro tenta buscar componente customizado
     if (currentStepConfig.headerComponent) {
       const CustomHeaderComponent = getStepHeaderComponent(currentStepConfig.headerComponent);
       if (CustomHeaderComponent) {
         return <CustomHeaderComponent />;
       }
     }
-    
-    // Fallback para header padrão
+
     return (
-      <DefaultStepHeader 
-        title={currentStepConfig.title} 
+      <DefaultStepHeader
+        title={currentStepConfig.title}
         subtitle={currentStepConfig.subtitle}
       />
     );
@@ -155,7 +191,7 @@ export function DynamicMultistep({
         {renderStepHeader()}
         <LoadingStep
           onComplete={goToNextStep}
-          duration={currentStepConfig.duration || 5000}
+          duration={currentStepConfig.duration || 3000}
         />
       </div>
     );
@@ -165,17 +201,50 @@ export function DynamicMultistep({
     <div>
       {renderStepHeader()}
       <div className="p-6 bg-white rounded-[8px] shadow-lg">
-        {/* 👈 Mostrar erro de submissão se houver */}
+
+
+        {/* <div className="mx-auto max-w-4xl space-y-4 text-center mb-6">
+
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+              style={{
+                width: `${((currentStepIndex + 1) / visibleSteps.length) * 100}%`
+              }}
+            />
+          </div>
+
+
+
+
+
+          <div className="flex gap-2 items-center justify-center text-sm">
+            <Image src="/shield-green.svg" alt="Shield" width={20} height={20} />
+            {(() => {
+              switch (currentStepIndex) {
+                case 0:
+                  return "Receba até 3 orçamentos grátis!";
+                case 1:
+                  return "Orçamentos rápidos e seguros";
+                case 2:
+                  return "Receba até 3 orçamentos grátis!";
+                default:
+                  return "Você está indo bem, agora falta pouco!";
+              }
+            })()}
+          </div>
+
+        </div> */}
+
+
         {submissionError && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            ❌ {submissionError}
+            {submissionError}
           </div>
         )}
 
-        {/* OriginUI Stepper - Horizontal Progress Bar Style */}
-        <div className="mx-auto max-w-4xl space-y-4 text-center hidden">
-          {/* Progress percentage */}
-        </div>
+        {/* 🚫 REMOVIDO - Progress bar agora está no header */}
+        {/* Progress bar foi movido para HeaderStepper */}
 
         {/* Step Content */}
         <div className="space-y-6">
@@ -196,17 +265,16 @@ export function DynamicMultistep({
           <Button
             variant="outline"
             onClick={handlePrevious}
-            disabled={isFirstStep || submissionLoading} // 👈 Desabilitar durante submit
+            disabled={isFirstStep || submissionLoading}
             className="flex-1"
           >
             Voltar
           </Button>
           <Button
             onClick={handleNext}
-            disabled={submissionLoading} // 👈 Desabilitar durante submit
+            disabled={submissionLoading}
             className="flex-1"
           >
-            {/* 👈 Mostrar loading */}
             {submissionLoading ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -221,3 +289,20 @@ export function DynamicMultistep({
     </div>
   );
 }
+
+
+
+
+{/* <div className="mx-auto max-w-4xl space-y-4 text-center mb-6">
+<div className="w-full bg-gray-200 rounded-full h-2">
+  <div 
+    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+    style={{ 
+      width: `${((currentStepIndex + 1) / visibleSteps.length) * 100}%` 
+    }}
+  />
+</div>
+<p className="text-sm text-gray-600">
+  Etapa {currentStepIndex + 1} de {visibleSteps.length}
+</p>
+</div>  */}

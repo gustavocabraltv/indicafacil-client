@@ -11,6 +11,13 @@ export interface Option {
   badge?: string;      // Ex: "Popular", "Urgente"
 }
 
+// Estrutura de validação condicional
+export interface StepCondition {
+  field: string;                           // ID do campo a verificar
+  value: string | string[];                // Valor(es) que ativam a condição
+  operator?: 'equals' | 'includes' | 'not_equals';  // Como comparar
+}
+
 // Estrutura de um campo individual
 export interface StepField {
   id: string;                    // Identificador único do campo
@@ -27,7 +34,7 @@ export interface StepField {
   };
 }
 
-// Estrutura de um step/passo
+// Estrutura de um step/passo (agora com condições)
 export interface Step {
   id: string;                    // Identificador único do step
   title: string;                 // Título que aparece no topo
@@ -38,37 +45,133 @@ export interface Step {
   duration?: number;             // Duração do loading em ms
   headerComponent?: string;      // ID do componente de header customizado
   subtitle?: string;             // Subtitle para o header padrão (se não usar headerComponent)
+  
+  // NOVAS PROPRIEDADES PARA FLUXOS CONDICIONAIS
+  condition?: StepCondition;     // Condição simples para mostrar o step
+  showIf?: (answers: FormData) => boolean;  // Função customizada mais complexa
 }
 
-// Configuração completa do multistep
+// Configuração completa do multistep (agora com navegação customizada)
 export interface MultistepConfig {
   id: string;                    // ID único da configuração
   title: string;                 // Título geral do formulário
   steps: Step[];                 // Array com todos os steps
   category?: string;             // Categoria associada (ex: "3231")
+  
+  // NOVA PROPRIEDADE PARA LÓGICA DE NAVEGAÇÃO CUSTOMIZADA
+  getNextStep?: (currentStepId: string, answers: FormData) => string | null;
 }
 
-// Estrutura dos dados preenchidos pelo usuário
+// Estrutura dos dados preenchidos pelo usuário (sem alteração)
 export interface FormData {
   [stepId: string]: {            // Cada step tem seus dados
     [fieldId: string]: string | string[];  // Cada campo pode ser string ou array (checkbox)
   };
 }
 
-// Exemplo de como os dados ficam salvos:
+// NOVAS FUNÇÕES HELPER PARA TRABALHAR COM CONDIÇÕES
+
+/**
+ * Verifica se um step deve ser exibido baseado nas respostas atuais
+ */
+export function shouldShowStep(step: Step, answers: FormData): boolean {
+  // Se tem função showIf customizada, usa ela
+  if (step.showIf) {
+    return step.showIf(answers);
+  }
+  
+  // Se tem condição simples, verifica
+  if (step.condition) {
+    return checkStepCondition(step.condition, answers);
+  }
+  
+  // Se não tem condição, sempre mostra
+  return true;
+}
+
+/**
+ * Verifica uma condição simples
+ */
+export function checkStepCondition(condition: StepCondition, answers: FormData): boolean {
+  const { field, value, operator = 'equals' } = condition;
+  
+  // Busca o valor do campo nas respostas (precisa navegar pelos steps)
+  const fieldValue = getFieldValue(field, answers);
+  
+  switch (operator) {
+    case 'equals':
+      return fieldValue === value;
+    
+    case 'includes':
+      if (Array.isArray(value)) {
+        return Array.isArray(fieldValue) 
+          ? value.some(v => fieldValue.includes(v))
+          : value.includes(fieldValue as string);
+      }
+      return Array.isArray(fieldValue) 
+        ? fieldValue.includes(value as string)
+        : fieldValue === value;
+    
+    case 'not_equals':
+      return fieldValue !== value;
+    
+    default:
+      return fieldValue === value;
+  }
+}
+
+/**
+ * Busca o valor de um campo específico em todas as respostas
+ */
+export function getFieldValue(fieldId: string, answers: FormData): string | string[] | undefined {
+  for (const stepData of Object.values(answers)) {
+    if (stepData[fieldId] !== undefined) {
+      return stepData[fieldId];
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Retorna apenas os steps que devem ser exibidos baseado nas respostas
+ */
+export function getVisibleSteps(allSteps: Step[], answers: FormData): Step[] {
+  return allSteps.filter(step => shouldShowStep(step, answers));
+}
+
+/**
+ * Encontra o próximo step válido usando lógica customizada ou padrão
+ */
+export function getNextStepId(
+  config: MultistepConfig, 
+  currentStepId: string, 
+  answers: FormData
+): string | null {
+  // Se tem função customizada, usa ela
+  if (config.getNextStep) {
+    return config.getNextStep(currentStepId, answers);
+  }
+  
+  // Lógica padrão: próximo step visível na sequência
+  const visibleSteps = getVisibleSteps(config.steps, answers);
+  const currentIndex = visibleSteps.findIndex(step => step.id === currentStepId);
+  
+  if (currentIndex >= 0 && currentIndex < visibleSteps.length - 1) {
+    return visibleSteps[currentIndex + 1].id;
+  }
+  
+  return null; // Fim do fluxo
+}
+
+// Exemplo de como os dados ficam salvos (sem alteração):
 // {
-//   "location-type": {
-//     "property-type": ["apartamento", "casa"]  // checkbox = array
+//   "paint-type": {
+//     "paint-location": "interior"           // radio = string
 //   },
-//   "paint-details": {
-//     "room-types": ["sala", "quartos"],        // checkbox = array  
-//     "paint-type": "latex",                    // radio = string
-//     "area-size": "media"                      // radio = string
+//   "interior-areas": {
+//     "interior-items": ["paredes", "teto"]  // checkbox = array
 //   },
-//   "timing-contact": {
-//     "urgency": "duas-semanas",                // radio = string
-//     "additional-info": "Prefiro tinta branca", // textarea = string
-//     "name": "João Silva",                     // text = string
-//     "phone": "(11) 99999-9999"               // text = string
+//   "interior-rooms-count": {
+//     "room-count": "3-4"                    // radio = string
 //   }
 // }
