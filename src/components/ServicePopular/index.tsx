@@ -42,7 +42,7 @@ export default function ServicePopular() {
               <div>
                 <h2 className="text-base font-semibold">{s.title}</h2>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-[12px]">
                   <span className="font-bold inline-flex items-center gap-2">
                     <Image
                       src="/star-yellow.svg"
@@ -54,7 +54,7 @@ export default function ServicePopular() {
                   </span>
 
                   {/* divisor vertical que não “colapsa” em flex */}
-                  <span className="bg-gray-300 w-px self-stretch my-1" />
+                  <span className="bg-gray-300 w-px self-stretch my-1 " />
 
                   <span className="text-gray-600">
                     Preço médio{" "}
