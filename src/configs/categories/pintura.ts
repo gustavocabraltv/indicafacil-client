@@ -667,10 +667,10 @@ export const pinturaConfig: MultistepConfig = {
           type: 'terms-checkbox',
           label: '',
           required: true,
-          termsText: 'Li e concordo com a',
+          termsText: 'Li e concordo com os',
           links: [
-            { text: 'Política de Privacidade', url: '/politica-privacidade' },
-            { text: 'Termos de Uso', url: '/termos-uso' }
+            { text: 'termos de uso', url: '/politica-privacidade' },
+  
           ]
         }
         

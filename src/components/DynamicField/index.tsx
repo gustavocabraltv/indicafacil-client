@@ -210,7 +210,7 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
                 >
                   {link.text}
                 </a>
-                {index < (field.links?.length || 0) - 1 && ' e os '}
+                {index < (field.links?.length || 0) - 1 && <span className="sm:inline block"> e os </span>}
               </span>
             ))}
             {field.required && <span className="text-red-500 ml-1">*</span>}
