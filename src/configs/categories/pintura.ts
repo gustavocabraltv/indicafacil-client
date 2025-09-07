@@ -464,6 +464,7 @@ export const pinturaConfig: MultistepConfig = {
         if (paintLocation === 'exterior' &&
             exteriorScope === 'item-unico' &&
             itemType && 
+            typeof itemType === 'string' &&
             ['janelas', 'grade-cerca', 'movel-externo'].includes(itemType)) {
           return true;
         }
