@@ -17,17 +17,14 @@ const steps = [
     {
         step: 1,
         title: "Serviço",
-
     },
     {
         step: 2,
         title: "Detalhes",
-
     },
     {
         step: 3,
         title: "Contato",
-
     },
 ]
 
@@ -39,14 +36,23 @@ export function HeaderStepper() {
         return <div className='bg-white h-18 w-full'></div>;
     }
 
+    // Lógica: sempre step 2 (Detalhes), exceto no penúltimo step que vai para step 3 (Contato)
+    const getStepperValue = () => {
+        // Se está no penúltimo step, mostrar step 3 (Contato)
+        if (currentStep === totalSteps - 1) {
+            return 3;
+        }
+        // Caso contrário, sempre step 2 (Detalhes)
+        return 2;
+    };
+
+    const stepperValue = getStepperValue();
     const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
 
     return (
         <div className='bg-white h-24 w-full px-8 py-4 shadow-sm border-b'>
-
-
             <div className="space-y-8 text-center">
-                <Stepper defaultValue={2}>
+                <Stepper defaultValue={2} value={stepperValue}>
                     {steps.map(({ step, title }) => (
                         <StepperItem
                             key={step}
@@ -57,7 +63,6 @@ export function HeaderStepper() {
                                 <StepperIndicator />
                                 <div className="space-y-0.5 px-2">
                                     <StepperTitle>{title}</StepperTitle>
-                                   
                                 </div>
                             </StepperTrigger>
                             {step < steps.length && (
@@ -66,30 +71,7 @@ export function HeaderStepper() {
                         </StepperItem>
                     ))}
                 </Stepper>
-            
             </div>
-
-
-            {/* <div className="max-w-2xl mx-auto space-y-3">
-   
-        {stepTitle && (
-          <h2 className="text-lg font-medium text-gray-800 text-center">
-            {stepTitle}
-          </h2>
-        )}
-        
-  
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
-
-        <p className="text-sm text-gray-600 text-center">
-          Etapa {currentStep + 1} de {totalSteps}
-        </p>
-      </div> */}
         </div>
     );
 }
