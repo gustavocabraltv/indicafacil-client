@@ -3,6 +3,7 @@
 
 import { forwardRef, useState, useEffect } from 'react'
 import { Input } from './input'
+import { PhoneIcon } from "lucide-react"
 
 interface PhoneInputProps {
   value?: string
@@ -77,17 +78,22 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
     }
 
     return (
-      <Input
-        ref={ref}
-        type="tel"
-        value={displayValue}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder || '(11) 9 9999-9999'}
-        className={className}
-        required={required}
-        maxLength={16} // Máximo para o formato completo
-      />
+      <div className="relative">
+        <Input
+          ref={ref}
+          type="tel"
+          value={displayValue}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder || 'DDD + Telefone'}
+          className={`peer ps-9 ${className || ''}`}
+          required={required}
+          maxLength={16} // Máximo para o formato completo
+        />
+        <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+          <PhoneIcon size={16} aria-hidden="true" />
+        </div>
+      </div>
     )
   }
 )

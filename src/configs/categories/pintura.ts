@@ -652,7 +652,7 @@ export const pinturaConfig: MultistepConfig = {
           type: 'phone',
           label: 'WhatsApp',
           required: true,
-          placeholder: '(11) 99999-9999'
+          placeholder: 'DDD + Telefone'
         },
         {
           id: 'newsletter-opt-in',
