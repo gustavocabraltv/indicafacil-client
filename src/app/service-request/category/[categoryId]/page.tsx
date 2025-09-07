@@ -61,9 +61,14 @@ export default function CategoryPage() {
         <HeaderStepper /> {/* 🆕 Progress bar no header */}
         
         <main className="p-8 max-w-2xl mx-auto min-h-screen">
-          <div className="mb-6">
-          
-          </div>
+          {/* <div className="mb-6">
+            <button
+              onClick={handleBack}
+              className="text-sm text-muted-foreground hover:text-foreground mb-2 flex items-center gap-1"
+            >
+              ← Voltar para categorias
+            </button>
+          </div> */}
 
           <div>
             <DynamicMultistep
