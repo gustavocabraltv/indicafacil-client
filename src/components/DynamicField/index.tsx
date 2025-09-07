@@ -33,10 +33,6 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
 
     return (
       <fieldset className="space-y-2">
-        {/* <legend className="text-sm font-medium leading-none">
-          {field.label}
-          {field.required && <span className="text-destructive ml-1">*</span>}
-        </legend> */}
         <div className="gap-0 -space-y-px rounded-md shadow-xs">
           {field.options?.map((option, i) => {
             const inputId = `${id}-${option.value}`;
@@ -91,10 +87,6 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
     
     return (
       <fieldset className="space-y-2">
-        {/* <legend className="text-sm font-medium leading-none">
-          {field.label}
-          {field.required && <span className="text-destructive ml-1">*</span>}
-        </legend> */}
         <RadioGroup
           value={selectedValue}
           onValueChange={(value) => onChange(value)}
@@ -106,9 +98,7 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
             return (
               <div
                 key={option.value}
-                // className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-accent relative flex flex-col gap-4 border p-4 outline-none first:rounded-t-md last:rounded-b-md has-data-[state=checked]:z-10"
                 className=" has-data-[state=checked]:bg-accent relative flex flex-col gap-4 border p-4 outline-none first:rounded-t-md last:rounded-b-md has-data-[state=checked]:z-10"
-
            >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -186,6 +176,50 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
     </div>
   );
 
+  // Renderizar campo de termos - CORRIGIDO
+  const renderTermsCheckboxField = () => {
+    // Agora verifica corretamente: 'accepted' = true, outros valores = false
+    const isChecked = value === 'accepted';
+    
+    const inputId = `${id}-terms`;
+
+    return (
+      <div className="space-y-2 pt-6">
+        <div className="flex items-start gap-2">
+          <Checkbox
+            id={inputId}
+            checked={isChecked}
+            onCheckedChange={(checked) => {
+              // Quando marcado, define como 'accepted', quando desmarcado, define como string vazia
+              onChange(checked === true ? 'accepted' : '');
+            }}
+            required={field.required}
+            className="mt-1 flex-shrink-0"
+          />
+          <Label htmlFor={inputId} className="text-sm text-gray-600 leading-relaxed cursor-pointer">
+            {field.termsText && (
+              <span>{field.termsText} </span>
+            )}
+            {field.links?.map((link, index) => (
+              <span key={index}>
+                <a 
+                  href={link.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  {link.text}
+                </a>
+                {index < (field.links?.length || 0) - 1 && ' e os '}
+              </span>
+            ))}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+          </Label>
+        </div>
+      </div>
+    );
+  };
+
   switch (field.type) {
     case 'checkbox':
       return renderCheckboxField();
@@ -197,6 +231,8 @@ export function DynamicField({ field, value, onChange }: DynamicFieldProps) {
       return renderPhoneField();
     case 'textarea':
       return renderTextareaField();
+    case 'terms-checkbox':
+      return renderTermsCheckboxField();
     default:
       return null;
   }

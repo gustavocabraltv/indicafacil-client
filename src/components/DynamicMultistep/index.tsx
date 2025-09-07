@@ -165,10 +165,68 @@ export function DynamicMultistep({
    }
  };
 
- const getFieldValue = (fieldId: string, stepId: string = currentStepConfig.id) => {
-   return formData[stepId]?.[fieldId] ||
-     (visibleSteps.find(s => s.id === stepId)?.fields.find(f => f.id === fieldId)?.type === 'checkbox' ? [] : '');
- };
+// Função getFieldValue corrigida para o DynamicMultistep.tsx
+
+const getFieldValue = (fieldId: string, stepId: string = currentStepConfig.id) => {
+  const currentValue = formData[stepId]?.[fieldId];
+  
+  // Se já existe um valor, retorna ele
+  if (currentValue !== undefined && currentValue !== null && currentValue !== '') {
+    return currentValue;
+  }
+  
+  // Encontra o field para verificar o tipo
+  const field = visibleSteps.find(s => s.id === stepId)?.fields.find(f => f.id === fieldId);
+  
+  if (!field) {
+    return '';
+  }
+  
+  // CORRIGIDO: Para terms-checkbox, inicia como 'accepted' apenas na primeira vez
+  if (field.type === 'terms-checkbox') {
+    // Verifica se é realmente a primeira vez (não existe no formData)
+    if (formData[stepId]?.[fieldId] === undefined) {
+      // Define o valor padrão no formData para manter consistência
+      setFormData(prev => ({
+        ...prev,
+        [stepId]: {
+          ...prev[stepId],
+          [fieldId]: 'accepted'
+        }
+      }));
+      
+      return 'accepted';
+    }
+    
+    // Se já existe no formData, retorna o valor atual (pode ser '' se foi desmarcado)
+    return currentValue || '';
+  }
+  
+  // Para radio buttons, seleciona a primeira opção por padrão
+  if (field.type === 'radio' && field.options && field.options.length > 0) {
+    const firstOption = field.options[0];
+    
+    // Define o valor padrão no formData também para manter consistência
+    setFormData(prev => ({
+      ...prev,
+      [stepId]: {
+        ...prev[stepId],
+        [fieldId]: firstOption.value
+      }
+    }));
+    
+    return firstOption.value;
+  }
+  
+  // Para checkbox, retorna array vazio
+  if (field.type === 'checkbox') {
+    return [];
+  }
+  
+  // Para outros tipos, retorna string vazia
+  return '';
+};
+
 
  const goToNextStep = () => {
    if (isLastStep) {

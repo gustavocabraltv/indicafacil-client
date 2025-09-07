@@ -654,14 +654,27 @@ export const pinturaConfig: MultistepConfig = {
           required: true,
           placeholder: 'DDD + Telefone'
         },
+        // {
+        //   id: 'newsletter-opt-in',
+        //   type: 'checkbox',
+        //   label: 'Comunicações opcionais',
+        //   options: [
+        //     { value: 'tips-guides', label: 'Quero receber orçamentos pelo WhatsApps' },
+        //   ]
+        // },
         {
-          id: 'newsletter-opt-in',
-          type: 'checkbox',
-          label: 'Comunicações opcionais',
-          options: [
-            { value: 'tips-guides', label: 'Quero receber orçamentos pelo WhatsApp' },
+          id: 'terms-agreement',
+          type: 'terms-checkbox',
+          label: '',
+          required: true,
+          termsText: 'Li e concordo com a',
+          links: [
+            { text: 'Política de Privacidade', url: '/politica-privacidade' },
+            { text: 'Termos de Uso', url: '/termos-uso' }
           ]
         }
+        
+        
       ]
     }
   ]

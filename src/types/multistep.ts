@@ -1,7 +1,7 @@
 // types/multistep.ts
 
 // Tipos de campo que o sistema suporta
-export type FieldType = 'radio' | 'checkbox' | 'text' | 'textarea' | 'select' | 'phone';
+export type FieldType = 'radio' | 'checkbox' | 'text' | 'textarea' | 'select' | 'phone' | 'terms-checkbox';
 
 // Estrutura de uma opção (para radio, checkbox, select)
 export interface Option {
@@ -27,6 +27,14 @@ export interface StepField {
   required?: boolean;            // Se é obrigatório
   options?: Option[];            // Opções para radio/checkbox/select
   placeholder?: string;          // Placeholder para text/textarea
+  
+  // Campos específicos para terms-checkbox
+  termsText?: string;            // Texto antes dos links (ex: "Li e concordo com a")
+  links?: Array<{               // Links para termos e políticas
+    text: string;               // Texto do link
+    url: string;                // URL do link
+  }>;
+  
   validation?: {                 // Validações extras (para implementar depois)
     min?: number;
     max?: number;
