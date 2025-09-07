@@ -19,7 +19,7 @@ const SUGGESTIONS = [
 
 // ⚡ Atalhos (Mais buscados) com controle de URL independente
 const SHORTCUTS = [
-  { label: "Pintor", href: "/pintura" },
+  { label: "Pintor", href: "/service-request/category/3231" },
   { label: "Pedreiro", href: "/pedreiro" },
   { label: "Encanador", href: "/encanador" },
   { label: "Diarista", href: "/diarista" },
