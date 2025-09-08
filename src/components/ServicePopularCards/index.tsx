@@ -10,7 +10,7 @@ type PopularService = {
   price: number;         // número em BRL (ex.: 197 -> R$197,00)
 };
 
-const popularServices: PopularService[] = [
+const popularServicesCards: PopularService[] = [
   { img: "/popular-01.png", title: "Pintura de paredes e tetos", reviewScore: 4.9, price: 197 },
   { img: "/popular-02.png", title: "Pedreiro", reviewScore: 4.9, price: 197 },
   { img: "/popular-03.png", title: "Pequenos reparos", reviewScore: 4.9, price: 197 },
@@ -33,7 +33,7 @@ export default function ServicePopular() {
 
         {/* container dos cards */}
         <div className="flex flex-wrap gap-3">
-          {popularServices.map((s) => (
+          {popularServicesCards.map((s) => (
             <article
               key={s.title}
               className="card-popular"

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Test from '@/components/Test';
 
 // 🔗 Catálogo central de rotas sugeridas (nome + url)
 // Edite livremente os hrefs conforme sua IA de rotas.
@@ -17,13 +18,13 @@ const SUGGESTIONS = [
   { label: "Door, Cabinet, & Furniture Repair", href: "/reparo-moveis-portas" },
 ];
 
-// ⚡ Atalhos (Mais buscados) com controle de URL independente
+// ⚡ Atalhos com controle de URL independente
 const SHORTCUTS = [
-  { label: "Pintor", href: "/service-request/category/3231" },
-  { label: "Pedreiro", href: "/pedreiro" },
-  { label: "Encanador", href: "/encanador" },
-  { label: "Diarista", href: "/diarista" },
-  { label: "Marido de aluguel", href: "/marido-de-aluguel" },
+  { label: "Pintor", href: "/service-request/category/pintura" },
+  { label: "Pedreiro", href: "/service-request/category/pedreiro" },
+  { label: "Encanador", href: "/service-request/category/encanador" },
+  { label: "Diarista", href: "/service-request/category/diarista" },
+  { label: "Marido de aluguel", href: "/service-request/category/marido-de-aluguel" },
 ];
 
 const HomePage: React.FC = () => {
@@ -109,7 +110,7 @@ const HomePage: React.FC = () => {
           <div className="max-w-6xl mx-auto w-full">
             <div className="px-4 py-4 flex justify-between items-center">
               <Link href="/">
-                <Image src="/logo.svg" alt="Logo" className="h-8" width={190} height={50}/>
+                <Image src="/logo.svg" alt="Logo" className="h-8" width={190} height={50} />
               </Link>
               <Link href="/login" className="text-gray-700">Entrar</Link>
             </div>
@@ -120,7 +121,7 @@ const HomePage: React.FC = () => {
       {/* Hero Section */}
       <div className="w-full">
         <div className="max-w-6xl mx-auto w-full">
-          <div className="flex justify-center items-center flex-col h-[600px]">
+          <div className="flex justify-center items-center flex-col h-[500px]">
             {/* Hero Headline */}
             <div className="w-fit pt-14 pb-8 h-fit flex justify-center items-center">
               <h1 className="text-black text-center w-[60%] text-[55px] font-semibold leading-tight max-[480px]:w-full max-[480px]:text-4xl max-[480px]:px-4">
@@ -158,7 +159,7 @@ const HomePage: React.FC = () => {
                   className="flex w-[50px] h-[50px] rounded-full items-center justify-center aspect-square"
                   aria-label="Buscar"
                 >
-                  🔍
+                  <Image src='/search-icon.svg' alt='Search' width={32} height={32} />
                 </button>
               </div>
 
@@ -189,7 +190,7 @@ const HomePage: React.FC = () => {
                     <button
                       key={shortcut.label + index}
                       onClick={() => handleShortcutClick(shortcut)}
-                      className="rounded-[50px] border border-[#D3D3D3] text-base text-[#545860] py-2.5 px-4 bg-transparent hover:bg-[#0e7A60] hover:text-white hover:border-[#0e7A60] transition-colors duration-200"
+                      className="cursor-pointer rounded-[50px] border border-[#D3D3D3] text-base text-[#545860] py-2.5 px-4 bg-transparent hover:bg-[#FF4C44]  hover:text-white hover:border-[#FF4C44] transition-colors duration-200"
                     >
                       {shortcut.label}
                     </button>
@@ -201,6 +202,10 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <Test />
+
+
     </div>
   );
 };
