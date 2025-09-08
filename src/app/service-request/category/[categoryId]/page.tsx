@@ -7,6 +7,7 @@ import { getConfigByCategory, serviceCategories } from '@/configs/service-catego
 import { FormData } from '@/types/multistep'
 import { MultistepProgressProvider } from '@/contexts/MultistepProgressContext' // 🆕
 import { HeaderStepper } from '@/components/HeaderStepper' // 🆕
+import { FooterStepper } from '@/components/FooterStepper'
 
 export default function CategoryPage() {
   const router = useRouter()
@@ -57,9 +58,10 @@ export default function CategoryPage() {
 
   return (
     <MultistepProgressProvider> {/* 🆕 Provider envolvendo tudo */}
+     <FooterStepper/>
       <div className='bg-[#F5F5F2] h-screen '>
         <HeaderStepper /> {/* 🆕 Progress bar no header */}
-        
+       
         <main className="p-8 max-w-2xl mx-auto flex-1">
           {/* <div className="mb-6">
             <button
@@ -77,7 +79,11 @@ export default function CategoryPage() {
             />
           </div>
         </main>
+        
+      
       </div>
+      
     </MultistepProgressProvider>
+    
   )
 }
