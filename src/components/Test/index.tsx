@@ -36,7 +36,7 @@ export default function Test() {
           {Cards.map((s) => (
             <article
               key={s.title}
-              className="p-3 rounded-md border-[0.25px] border-gray-200 bg-white flex gap-4 items-center"
+              className="p-3 rounded-md border-[0.25px] border-gray-200 bg-white flex gap-4 items-center cursor-pointer hover:shadow-xl"
             >
               <Image src={s.img} width={60} height={60} alt={s.title} />
               <div>
