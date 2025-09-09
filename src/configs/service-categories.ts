@@ -13,59 +13,19 @@ import { calhas_quick } from './categories/quick/servico-de-calhas-quick'
 import { encanamento_quick } from './categories/quick/servico-de-encanamento-quick'
 import { servicos_de_reparo_quick } from './categories/quick/servico-de-reparo-quick'
 import { reparo_telhados_quick } from './categories/quick/reparo-de-telhados-quick'
+import { eletricista_quick } from './categories/quick/eletricista-quick'
 
 
 
-// Configurações que ainda precisam ser movidas para arquivos separados
-export const encanadorConfig: MultistepConfig = {
-  id: 'encanador-service',
-  title: 'Serviço de Encanamento',
-  category: '3232',
-  steps: [
-    {
-      id: 'service-type',
-      title: 'Qual tipo de serviço de encanamento você precisa?',
-      fields: [
-        {
-          id: 'service-category',
-          type: 'radio',
-          label: 'Tipo de serviço',
-          required: true,
-          options: [
-            { value: 'vazamento', label: 'Vazamento (emergência)', badge: 'Urgente' },
-            { value: 'entupimento', label: 'Desentupimento' },
-            { value: 'instalacao', label: 'Instalação nova' },
-            { value: 'manutencao', label: 'Manutenção e reparos' },
-            { value: 'troca-equipamentos', label: 'Troca de equipamentos' },
-          ]
-        },
-        {
-          id: 'additional-details',
-          type: 'textarea',
-          label: 'Conte mais detalhes sobre o problema...',
-          placeholder: 'Ex: Torneira pingando, água vazando pelo teto, vaso entupido, preciso instalar chuveiro...',
-        }
-      ]
-    },
-    // ... resto dos steps do encanador permanecem iguais
-  ]
-};
 
-export const eletricistaConfig: MultistepConfig = {
-  id: 'eletricista-service',
-  title: 'Serviço Elétrico',
-  category: '3233',
-  steps: [
-    // ... steps do eletricista permanecem iguais
-  ]
-};
+
 
 // Mapeamento das configurações por categoria
 export const categoryConfigs: Record<string, MultistepConfig> = {
-  'pintura': pintura_quick, // Agora importado do arquivo separado
+  'pintura': pinturaConfig, // Agora importado do arquivo separado
   'encanador': encanador_quick, 
   'marido-de-aluguel': marido_de_aluguel_quick,
-  'eletricista': marido_de_aluguel_quick,
+  'eletricista': eletricista_quick,
   'pedreiro': marido_de_aluguel_quick,
   'diarista': diarista_quick,
   'jardineiro': jardineiro_quick,

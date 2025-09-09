@@ -1,10 +1,10 @@
-// configs/categories/encanador.ts
+// configs/categories/quick/arquiteto-quick.ts
 import { MultistepConfig } from '@/types/multistep';
 
-export const encanador_quick: MultistepConfig = {
-  id: 'encanador-service',
-  title: 'Serviço de Encanador',
-  category: '322',
+export const eletricista_quick: MultistepConfig = {
+  id: 'eletricista',
+  title: 'Eletricista',
+  category: 'eletricista',
   steps: [
     // 1) Onde será o serviço? (Casa / Apartamento / Empresa)
     {
@@ -55,7 +55,7 @@ export const encanador_quick: MultistepConfig = {
             id: 'additional-details',
             type: 'textarea',
             label: 'Detalhes do serviço',
-            placeholder: 'Conte um pouco mais sobre o projeto (ex.: quantidade de cômodos, cores, reparos...)',
+            placeholder: 'Conte um pouco mais sobre o projeto (ex.: tipo de projeto, metragem, estilo desejado...)',
             required: false,
           },
         ],

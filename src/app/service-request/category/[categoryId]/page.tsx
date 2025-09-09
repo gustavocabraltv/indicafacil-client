@@ -58,10 +58,9 @@ export default function CategoryPage() {
 
   return (
     <MultistepProgressProvider> {/* 🆕 Provider envolvendo tudo */}
-     <FooterStepper/>
-      <div className='bg-[#F5F5F2] h-screen '>
+      <div className='bg-[#F5F5F2] h-dvh '>
         <HeaderStepper /> {/* 🆕 Progress bar no header */}
-       
+        
         <main className="p-8 max-w-2xl mx-auto flex-1">
           {/* <div className="mb-6">
             <button
@@ -82,7 +81,7 @@ export default function CategoryPage() {
         
       
       </div>
-      
+      <FooterStepper/>
     </MultistepProgressProvider>
     
   )

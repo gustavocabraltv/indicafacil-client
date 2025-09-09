@@ -50,7 +50,7 @@ export function HeaderStepper() {
     const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
 
     return (
-        <div className='bg-white h-24 w-full px-8 py-4 shadow-sm border-b'>
+        <div className='bg-white h-24 w-full px-8 py-4 shadow-sm border-b sticky top-0 z-50'>
             <div className="space-y-8 text-center">
                 <Stepper defaultValue={2} value={stepperValue}>
                     {steps.map(({ step, title }) => (
