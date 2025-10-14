@@ -1,21 +1,25 @@
-'use client';
-import Image from 'next/image'
-import Link from 'next/link'
-import React, { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Test from '@/components/Test';
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Test from "@/components/Test";
 
 // 🔗 Catálogo central de rotas sugeridas (nome + url)
 // Edite livremente os hrefs conforme sua IA de rotas.
 const SUGGESTIONS = [
-  { label: "Pintor", href: "/pintura" },
-  { label: "Pedreiro", href: "/pedreiro" },
-  { label: "Marido de Aluguel", href: "/marido-de-aluguel" },
-  { label: "Encanador", href: "/encanador" },
-  { label: "Truck Assisted Help Moving", href: "/mudanca-truck-assist" },
-  { label: "Help Moving", href: "/mudanca" },
-  { label: "Cleaning", href: "/limpeza" },
-  { label: "Door, Cabinet, & Furniture Repair", href: "/reparo-moveis-portas" },
+  { label: "Pintor", href: "/service-request/category/pintura" },
+  { label: "Pedreiro", href: "/service-request/category/pedreiro" },
+  {
+    label: "Marido de Aluguel",
+    href: "/service-request/category/marido-de-aluguel",
+  },
+  { label: "Encanador", href: "/service-request/category/encanador" },
+  {
+    label: "Diarista",
+    href: "/service-request/category/diarista",
+  },
+  { label: "Limpeza", href: "/service-request/category/diarista" },
 ];
 
 // ⚡ Atalhos com controle de URL independente
@@ -24,20 +28,24 @@ const SHORTCUTS = [
   { label: "Pedreiro", href: "/service-request/category/pedreiro" },
   { label: "Encanador", href: "/service-request/category/encanador" },
   { label: "Diarista", href: "/service-request/category/diarista" },
-  { label: "Marido de aluguel", href: "/service-request/category/marido-de-aluguel" },
+  {
+    label: "Marido de aluguel",
+    href: "/service-request/category/marido-de-aluguel",
+  },
 ];
 
 const HomePage: React.FC = () => {
   const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-  const [filteredSuggestions, setFilteredSuggestions] = useState<typeof SUGGESTIONS>(SUGGESTIONS);
+  const [filteredSuggestions, setFilteredSuggestions] =
+    useState<typeof SUGGESTIONS>(SUGGESTIONS);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   // Filtra sugestões com base no termo
   useEffect(() => {
     if (searchTerm.trim()) {
-      const filtered = SUGGESTIONS.filter(item =>
+      const filtered = SUGGESTIONS.filter((item) =>
         item.label.toLowerCase().includes(searchTerm.toLowerCase().trim())
       );
       setFilteredSuggestions(filtered);
@@ -51,12 +59,15 @@ const HomePage: React.FC = () => {
   // Fecha a caixa de sugestões ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
         setShowSuggestions(false);
       }
     };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   const handleInputFocus = () => {
@@ -69,20 +80,25 @@ const HomePage: React.FC = () => {
     router.push(href);
   };
 
-  const handleSuggestionClick = (suggestion: { label: string; href: string }) => {
+  const handleSuggestionClick = (suggestion: {
+    label: string;
+    href: string;
+  }) => {
     setSearchTerm(suggestion.label);
     goTo(suggestion.href);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
+    if (e.key === "Escape") {
       setShowSuggestions(false);
       (e.target as HTMLInputElement).blur();
       return;
     }
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       // 1) Se houver uma correspondência exata, vai nela
-      const exact = SUGGESTIONS.find(s => s.label.toLowerCase() === searchTerm.toLowerCase().trim());
+      const exact = SUGGESTIONS.find(
+        (s) => s.label.toLowerCase() === searchTerm.toLowerCase().trim()
+      );
       if (exact) {
         goTo(exact.href);
         return;
@@ -110,9 +126,17 @@ const HomePage: React.FC = () => {
           <div className="max-w-6xl mx-auto w-full">
             <div className="px-4 py-4 flex justify-between items-center">
               <Link href="/">
-                <Image src="/logo.svg" alt="Logo" className="h-8" width={190} height={50} />
+                <Image
+                  src="/logo.svg"
+                  alt="Logo"
+                  className="h-8"
+                  width={190}
+                  height={50}
+                />
               </Link>
-              <Link href="/login" className="text-gray-700">Entrar</Link>
+              <Link href="/login" className="text-gray-700">
+                Entrar
+              </Link>
             </div>
           </div>
         </nav>
@@ -151,22 +175,38 @@ const HomePage: React.FC = () => {
                 <button
                   onClick={() => {
                     // comportamento igual ao Enter
-                    const exact = SUGGESTIONS.find(s => s.label.toLowerCase() === searchTerm.toLowerCase().trim());
+                    const exact = SUGGESTIONS.find(
+                      (s) =>
+                        s.label.toLowerCase() ===
+                        searchTerm.toLowerCase().trim()
+                    );
                     if (exact) return goTo(exact.href);
-                    if (filteredSuggestions.length > 0) return goTo(filteredSuggestions[0].href);
-                    router.push(`/buscar?q=${encodeURIComponent(searchTerm.trim())}`);
+                    if (filteredSuggestions.length > 0)
+                      return goTo(filteredSuggestions[0].href);
+                    router.push(
+                      `/buscar?q=${encodeURIComponent(searchTerm.trim())}`
+                    );
                   }}
                   className="flex w-[50px] h-[50px] rounded-full items-center justify-center aspect-square"
                   aria-label="Buscar"
                 >
-                  <Image src='/search-icon.svg' alt='Search' width={32} height={32} />
+                  <Image
+                    src="/search-icon.svg"
+                    alt="Search"
+                    width={32}
+                    height={32}
+                  />
                 </button>
               </div>
 
               {/* Suggestion Box */}
               {showSuggestions && (
                 <div className="overflow-hidden rounded-[18px] mt-3 border border-gray-400 bg-white shadow-[0px_4px_32px_0px_rgba(32,51,86,0.12)] absolute left-4 right-4">
-                  <ul id="suggestion-listbox" role="listbox" aria-label="Sugestões">
+                  <ul
+                    id="suggestion-listbox"
+                    role="listbox"
+                    aria-label="Sugestões"
+                  >
                     {filteredSuggestions.map((suggestion, index) => (
                       <li
                         key={suggestion.label + index}
@@ -186,26 +226,25 @@ const HomePage: React.FC = () => {
               <div className="flex flex-col gap-3 w-full pt-8">
                 <span className="text-gray-700">Mais buscados</span>
                 <div className="flex flex-wrap gap-3">
-                  {SHORTCUTS.map((shortcut, index) => (
-                    <button
-                      key={shortcut.label + index}
-                      onClick={() => handleShortcutClick(shortcut)}
-                      className="cursor-pointer rounded-[50px] border border-[#D3D3D3] text-base text-[#545860] py-2.5 px-4 bg-transparent hover:bg-[#FF4C44]  hover:text-white hover:border-[#FF4C44] transition-colors duration-200"
+                  {SHORTCUTS.map((s, i) => (
+                    <Link
+                      key={s.label + i}
+                      href={s.href}
+                      prefetch
+                      // onClick={() => setSearchTerm(s.label)}
+                      className="cursor-pointer rounded-[50px] border border-[#D3D3D3] text-base text-[#545860] py-2.5 px-4 bg-transparent hover:bg-[#FF4C44] hover:text-white hover:border-[#FF4C44] transition-colors duration-200"
                     >
-                      {shortcut.label}
-                    </button>
+                      {s.label}
+                    </Link>
                   ))}
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
 
       <Test />
-
-
     </div>
   );
 };

@@ -1,22 +1,53 @@
-// app/service-request/category/[categoryId]/page.tsx - ATUALIZADO
+// app/service-request/category/[categoryId]/page.tsx - CORRIGIDO
 'use client'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { DynamicMultistep } from '@/components/DynamicMultistep'
 import { getConfigByCategory, serviceCategories } from '@/configs/service-categories'
 import { FormData } from '@/types/multistep'
-import { MultistepProgressProvider } from '@/contexts/MultistepProgressContext' // 🆕
-import { HeaderStepper } from '@/components/HeaderStepper' // 🆕
+import { MultistepProgressProvider } from '@/contexts/MultistepProgressContext'
+import { HeaderStepper } from '@/components/HeaderStepper'
 import { FooterStepper } from '@/components/FooterStepper'
 
 export default function CategoryPage() {
   const router = useRouter()
   const params = useParams<{ categoryId: string }>()
+  const searchParams = useSearchParams()
   const categoryId = params?.categoryId
 
-  // Se não tiver param, redireciona (notFound é server-only)
+  const [initialData, setInitialData] = useState<Record<string, any>>({})
+
+  // Captura description e price da URL
+  useEffect(() => {
+    const description = searchParams.get("description")
+    const price = searchParams.get("price")
+
+    if (description) {
+      setInitialData({
+        "service-description": description,
+        "estimated-price": price ? parseInt(price) : undefined,
+      })
+    }
+  }, [searchParams])
+
+  // 🔧 CORREÇÃO: Redirecionamentos dentro de useEffect
+  useEffect(() => {
+    if (!categoryId) {
+      router.replace('/service-request')
+      return
+    }
+
+    const config = getConfigByCategory(categoryId)
+    const categoryInfo = serviceCategories.find(cat => cat.id === categoryId)
+
+    if (!config || !categoryInfo) {
+      router.replace('/service-request?e=unknown-category')
+    }
+  }, [categoryId, router])
+
+  // Se não tiver categoryId, mostra loading enquanto redireciona
   if (!categoryId) {
-    router.replace('/service-request')
     return null
   }
 
@@ -24,8 +55,8 @@ export default function CategoryPage() {
   const config = getConfigByCategory(categoryId)
   const categoryInfo = serviceCategories.find(cat => cat.id === categoryId)
 
+  // Se não tiver config, mostra loading enquanto redireciona
   if (!config || !categoryInfo) {
-    router.replace('/service-request?e=unknown-category')
     return null
   }
 
@@ -57,9 +88,9 @@ export default function CategoryPage() {
   }
 
   return (
-    <MultistepProgressProvider> {/* 🆕 Provider envolvendo tudo */}
+    <MultistepProgressProvider>
       <div className='bg-[#F5F5F2] h-dvh '>
-        <HeaderStepper /> {/* 🆕 Progress bar no header */}
+        <HeaderStepper />
         
         <main className="p-8 max-w-2xl mx-auto flex-1">
           {/* <div className="mb-6">
@@ -74,15 +105,14 @@ export default function CategoryPage() {
           <div>
             <DynamicMultistep
               config={config}
+              initialData={initialData}
               onComplete={handleComplete}
             />
           </div>
         </main>
         
-      
       </div>
       <FooterStepper/>
     </MultistepProgressProvider>
-    
   )
 }

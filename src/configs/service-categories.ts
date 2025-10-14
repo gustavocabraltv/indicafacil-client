@@ -1,3 +1,4 @@
+
 // configs/service-categories.ts
 import { MultistepConfig } from '@/types/multistep';
 import { pinturaConfig } from './categories/pintura';

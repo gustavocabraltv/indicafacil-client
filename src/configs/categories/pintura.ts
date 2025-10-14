@@ -656,9 +656,9 @@ export const pinturaConfig: MultistepConfig = {
           required: true,
           options: [
             { value: "urgente", label: "Urgente (o quanto antes)" },
-            { value: "1-semana", label: "Dentro de 1 semana" },
+            { value: "1-semana", label: "Em até 1 semana" },
             { value: "15-dias", label: "Nos próximos 15 dias" },
-            { value: "sem-data", label: "Sem data definida" },
+            { value: "sem-data", label: "Ainda não tenho data" },
           ],
         },
       ],

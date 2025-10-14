@@ -1,29 +1,71 @@
-'use client';
+"use client";
 
 import Wrapper from "@/components/Wrapper";
 import Image from "next/image";
 
 type PopularService = {
-  img: string;           // caminho da imagem (popular-01.png, etc.)
+  img: string; // caminho da imagem (popular-01.png, etc.)
   title: string;
-  reviewScore: number;   // 0–5
-  price: number;         // número em BRL (ex.: 197 -> R$197,00)
+  reviewScore: number; // 0–5
+  price: number; // número em BRL (ex.: 197 -> R$197,00)
 };
 
 const popularServicesCards: PopularService[] = [
-  { img: "/popular-01.png", title: "Pintura de paredes e tetos", reviewScore: 4.9, price: 197 },
-  { img: "/popular-02.png", title: "Pedreiro", reviewScore: 4.9, price: 197 },
-  { img: "/popular-03.png", title: "Pequenos reparos", reviewScore: 4.9, price: 197 },
-  { img: "/popular-04.png", title: "Serviço de limpeza", reviewScore: 4.9, price: 197 },
-  { img: "/popular-05.png", title: "Reparo de telhado", reviewScore: 4.9, price: 197 },
-  { img: "/popular-06.png", title: "Serviços de encanamento", reviewScore: 4.9, price: 197 },
-  { img: "/popular-07.png", title: "Ar Condicionado", reviewScore: 4.9, price: 690 },
-  { img: "/popular-08.png", title: "Decks & varandas", reviewScore: 4.9, price: 197 },
-  { img: "/popular-09.png", title: "Pintura de Desocupação", reviewScore: 4.9, price: 197 },
+  {
+    img: "/popular-01.png",
+    title: "Pintura de paredes e tetos",
+    reviewScore: 4.9,
+    price: 240,
+  },
+  { img: "/popular-02.png", title: "Pedreiro", reviewScore: 4.9, price: 450 },
+  {
+    img: "/popular-03.png",
+    title: "Pequenos reparos",
+    reviewScore: 4.9,
+    price: 320,
+  },
+  {
+    img: "/popular-04.png",
+    title: "Serviço de limpeza",
+    reviewScore: 4.9,
+    price: 210,
+  },
+  {
+    img: "/popular-05.png",
+    title: "Reparo de telhado",
+    reviewScore: 4.9,
+    price: 350,
+  },
+  {
+    img: "/popular-06.png",
+    title: "Serviços de encanamento",
+    reviewScore: 4.9,
+    price: 600,
+  },
+  {
+    img: "/popular-07.png",
+    title: "Ar Condicionado",
+    reviewScore: 4.9,
+    price: 690,
+  },
+  {
+    img: "/popular-08.png",
+    title: "Decks & varandas",
+    reviewScore: 4.9,
+    price: 800,
+  },
+  {
+    img: "/popular-09.png",
+    title: "Pintura de Desocupação",
+    reviewScore: 4.9,
+    price: 650,
+  },
 ];
 
 const fmtBRL = (n: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
+    n
+  );
 
 export default function ServicePopular() {
   return (
@@ -34,10 +76,7 @@ export default function ServicePopular() {
         {/* container dos cards */}
         <div className="flex flex-wrap gap-3">
           {popularServicesCards.map((s) => (
-            <article
-              key={s.title}
-              className="card-popular"
-            >
+            <article key={s.title} className="card-popular">
               <Image src={s.img} width={60} height={60} alt={s.title} />
               <div>
                 <h2 className="text-base font-semibold">{s.title}</h2>
@@ -58,7 +97,9 @@ export default function ServicePopular() {
 
                   <span className="text-gray-600">
                     Preço médio{" "}
-                    <span className="font-bold text-black">{fmtBRL(s.price)}</span>
+                    <span className="font-bold text-black">
+                      {fmtBRL(s.price)}
+                    </span>
                   </span>
                 </div>
               </div>
