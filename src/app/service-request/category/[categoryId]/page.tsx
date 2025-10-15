@@ -1,125 +1,96 @@
-// app/service-request/category/[categoryId]/page.tsx - CORRIGIDO
-'use client';
+// app/service-request/category/[categoryId]/page.tsx
+'use client'
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { DynamicMultistep } from '@/components/DynamicMultistep';
-import { getConfigByCategory, serviceCategories } from '@/configs/service-categories';
-import { FormData } from '@/types/multistep';
-import { MultistepProgressProvider } from '@/contexts/MultistepProgressContext';
-import { HeaderStepper } from '@/components/HeaderStepper';
-import { FooterStepper } from '@/components/FooterStepper';
-
-// Tipagem específica para os campos injetados via URL
-// type InitialData = {
-//   'service-description'?: string
-//   'estimated-price'?: number
-// }
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useMemo } from 'react'
+import { DynamicMultistep } from '@/components/DynamicMultistep'
+import { getConfigByCategory, serviceCategories } from '@/configs/service-categories'
+import type { FormData as Answers } from '@/types/multistep'
+import { MultistepProgressProvider } from '@/contexts/MultistepProgressContext'
+import { HeaderStepper } from '@/components/HeaderStepper'
+import { FooterStepper } from '@/components/FooterStepper'
 
 export default function CategoryPage() {
-  const router = useRouter();
-  const params = useParams<{ categoryId: string }>();
-  const searchParams = useSearchParams();
-  const categoryId = params?.categoryId;
-  const [initialData, setInitialData] = useState<Record<string, string | number | undefined>>({});
+  const router = useRouter()
+  const params = useParams<{ categoryId: string }>()
+  const searchParams = useSearchParams()
+  const categoryId = params?.categoryId
 
-  // Captura description e price da URL
-  useEffect(() => {
-    const description = searchParams.get('description');
-    const price = searchParams.get('price');
+  // Carrega config e info já no topo
+  const config = categoryId ? getConfigByCategory(categoryId) : undefined
+  const categoryInfo = categoryId
+    ? serviceCategories.find(cat => cat.id === categoryId)
+    : undefined
 
-    if (description) {
-      setInitialData({
-        'service-description': description,
-        'estimated-price': price ? parseInt(price) : undefined,
-      });
+  // initialData no formato NESTED (Answers = FormData do seu types/multistep.ts)
+  const initialData = useMemo<Answers>(() => {
+    // sem config ainda? retorna vazio
+    if (!config) return {}
+
+    const description = searchParams.get('description')
+    const price = searchParams.get('price')
+    const hasPrice = !!price && !Number.isNaN(Number(price))
+
+    // lista de [fieldId, value] que queremos pré-preencher
+    const entries: Array<[string, string | string[]]> = []
+    if (description) entries.push(['service-description', description])
+    if (hasPrice) entries.push(['estimated-price', String(parseInt(price as string, 10))])
+    // se esse campo for array no seu schema, use:
+    // if (hasPrice) entries.push(['estimated-price', [String(parseInt(price as string, 10))]])
+
+    // Agrupa por stepId conforme o schema do config
+    const result: Answers = {}
+    for (const [fieldId, value] of entries) {
+      // tenta localizar o step que possui esse field
+      const step = config.steps.find(s => s.fields.some(f => f.id === fieldId))
+      const stepId = step?.id ?? '__prefill__' // fallback opcional
+
+      if (!result[stepId]) result[stepId] = {}
+      result[stepId][fieldId] = value
     }
-  }, [searchParams]);
+    return result
+  }, [searchParams, config])
 
-  // 🔧 CORREÇÃO: Redirecionamentos dentro de useEffect
+  // Redirecionamentos/validações
   useEffect(() => {
     if (!categoryId) {
-      router.replace('/service-request');
-      return;
+      router.replace('/service-request')
+      return
     }
-
-    const config = getConfigByCategory(categoryId);
-    const categoryInfo = serviceCategories.find((cat: { id: string }) => cat.id === categoryId);
-
     if (!config || !categoryInfo) {
-      router.replace('/service-request?e=unknown-category');
+      router.replace('/service-request?e=unknown-category')
     }
-  }, [categoryId, router]);
+  }, [categoryId, config, categoryInfo, router])
 
-  // Se não tiver categoryId, mostra loading enquanto redireciona
-  if (!categoryId) {
-    return null;
-  }
+  // Sem dados válidos? nada enquanto redireciona
+  if (!categoryId || !config || !categoryInfo) return null
 
-  // Config e info da categoria
-  const config = getConfigByCategory(categoryId);
-  const categoryInfo = serviceCategories.find((cat) => cat.id === categoryId);
-
-  // Se não tiver config, mostra loading enquanto redireciona
-  if (!config || !categoryInfo) {
-    return null;
-  }
-
-  const handleComplete = async (data: FormData) => {
+  const handleComplete = async (data: Answers) => {
     try {
-      // Ex.: enviar para API
-      // await fetch('/api/service-requests', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ categoryId, formData: data, timestamp: new Date().toISOString() })
-      // })
-
-      // Backup local
       localStorage.setItem(
         'lastServiceRequest',
-        JSON.stringify({
-          categoryId,
-          data,
-          timestamp: new Date().toISOString(),
-        })
-      );
-
-      router.push(`/service-request/success?category=${categoryId}`);
+        JSON.stringify({ categoryId, data, timestamp: new Date().toISOString() })
+      )
+      router.push(`/service-request/success?category=${categoryId}`)
     } catch (error) {
-      console.error('Erro ao enviar solicitação:', error);
-      alert('Erro ao enviar solicitação. Tente novamente.');
+      console.error('Erro ao enviar solicitação:', error)
+      alert('Erro ao enviar solicitação. Tente novamente.')
     }
-  };
-
-  // const handleBack = () => {
-  //   router.push('/service-request')
-  // }
+  }
 
   return (
     <MultistepProgressProvider>
-      <div className="bg-[#F5F5F2] h-dvh ">
+      <div className="bg-[#F5F5F2] h-dvh">
         <HeaderStepper />
-
         <main className="p-8 max-w-2xl mx-auto flex-1">
-          {/* <div className="mb-6">
-            <button
-              onClick={handleBack}
-              className="text-sm text-muted-foreground hover:text-foreground mb-2 flex items-center gap-1"
-            >
-              ← Voltar para categorias
-            </button>
-          </div> */}
-
-          <div>
-            <DynamicMultistep
-              config={config}
-              initialData={initialData}
-              onComplete={handleComplete}
-            />
-          </div>
+          <DynamicMultistep
+            config={config}
+            initialData={initialData}
+            onComplete={handleComplete}
+          />
         </main>
       </div>
       <FooterStepper />
     </MultistepProgressProvider>
-  );
+  )
 }
