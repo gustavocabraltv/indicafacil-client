@@ -47,7 +47,7 @@ export default function CategoryPage() {
     }
 
     const config = getConfigByCategory(categoryId)
-    const categoryInfo = serviceCategories.find(cat => cat.id === categoryId)
+      const categoryInfo = serviceCategories.find((cat: { id: string }) => cat.id === categoryId)
 
     if (!config || !categoryInfo) {
       router.replace('/service-request?e=unknown-category')
