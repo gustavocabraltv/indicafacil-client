@@ -1,14 +1,14 @@
 // app/service-request/category/[categoryId]/page.tsx - CORRIGIDO
-'use client'
+'use client';
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { DynamicMultistep } from '@/components/DynamicMultistep'
-import { getConfigByCategory, serviceCategories } from '@/configs/service-categories'
-import { FormData } from '@/types/multistep'
-import { MultistepProgressProvider } from '@/contexts/MultistepProgressContext'
-import { HeaderStepper } from '@/components/HeaderStepper'
-import { FooterStepper } from '@/components/FooterStepper'
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { DynamicMultistep } from '@/components/DynamicMultistep';
+import { getConfigByCategory, serviceCategories } from '@/configs/service-categories';
+import { FormData } from '@/types/multistep';
+import { MultistepProgressProvider } from '@/contexts/MultistepProgressContext';
+import { HeaderStepper } from '@/components/HeaderStepper';
+import { FooterStepper } from '@/components/FooterStepper';
 
 // Tipagem específica para os campos injetados via URL
 // type InitialData = {
@@ -16,56 +16,53 @@ import { FooterStepper } from '@/components/FooterStepper'
 //   'estimated-price'?: number
 // }
 
-
-
 export default function CategoryPage() {
-  const router = useRouter()
-  const params = useParams<{ categoryId: string }>()
-  const searchParams = useSearchParams()
-  const categoryId = params?.categoryId
-
-  const [initialData, setInitialData] = useState<Record<string, any>>({})
+  const router = useRouter();
+  const params = useParams<{ categoryId: string }>();
+  const searchParams = useSearchParams();
+  const categoryId = params?.categoryId;
+  const [initialData, setInitialData] = useState<Record<string, string | number | undefined>>({});
 
   // Captura description e price da URL
   useEffect(() => {
-    const description = searchParams.get("description")
-    const price = searchParams.get("price")
+    const description = searchParams.get('description');
+    const price = searchParams.get('price');
 
     if (description) {
       setInitialData({
-        "service-description": description,
-        "estimated-price": price ? parseInt(price) : undefined,
-      })
+        'service-description': description,
+        'estimated-price': price ? parseInt(price) : undefined,
+      });
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   // 🔧 CORREÇÃO: Redirecionamentos dentro de useEffect
   useEffect(() => {
     if (!categoryId) {
-      router.replace('/service-request')
-      return
+      router.replace('/service-request');
+      return;
     }
 
-    const config = getConfigByCategory(categoryId)
-      const categoryInfo = serviceCategories.find((cat: { id: string }) => cat.id === categoryId)
+    const config = getConfigByCategory(categoryId);
+    const categoryInfo = serviceCategories.find((cat: { id: string }) => cat.id === categoryId);
 
     if (!config || !categoryInfo) {
-      router.replace('/service-request?e=unknown-category')
+      router.replace('/service-request?e=unknown-category');
     }
-  }, [categoryId, router])
+  }, [categoryId, router]);
 
   // Se não tiver categoryId, mostra loading enquanto redireciona
   if (!categoryId) {
-    return null
+    return null;
   }
 
   // Config e info da categoria
-  const config = getConfigByCategory(categoryId)
-  const categoryInfo = serviceCategories.find(cat => cat.id === categoryId)
+  const config = getConfigByCategory(categoryId);
+  const categoryInfo = serviceCategories.find((cat) => cat.id === categoryId);
 
   // Se não tiver config, mostra loading enquanto redireciona
   if (!config || !categoryInfo) {
-    return null
+    return null;
   }
 
   const handleComplete = async (data: FormData) => {
@@ -78,18 +75,21 @@ export default function CategoryPage() {
       // })
 
       // Backup local
-      localStorage.setItem('lastServiceRequest', JSON.stringify({
-        categoryId,
-        data,
-        timestamp: new Date().toISOString()
-      }))
+      localStorage.setItem(
+        'lastServiceRequest',
+        JSON.stringify({
+          categoryId,
+          data,
+          timestamp: new Date().toISOString(),
+        })
+      );
 
-      router.push(`/service-request/success?category=${categoryId}`)
+      router.push(`/service-request/success?category=${categoryId}`);
     } catch (error) {
-      console.error('Erro ao enviar solicitação:', error)
-      alert('Erro ao enviar solicitação. Tente novamente.')
+      console.error('Erro ao enviar solicitação:', error);
+      alert('Erro ao enviar solicitação. Tente novamente.');
     }
-  }
+  };
 
   // const handleBack = () => {
   //   router.push('/service-request')
@@ -97,9 +97,9 @@ export default function CategoryPage() {
 
   return (
     <MultistepProgressProvider>
-      <div className='bg-[#F5F5F2] h-dvh '>
+      <div className="bg-[#F5F5F2] h-dvh ">
         <HeaderStepper />
-        
+
         <main className="p-8 max-w-2xl mx-auto flex-1">
           {/* <div className="mb-6">
             <button
@@ -118,9 +118,8 @@ export default function CategoryPage() {
             />
           </div>
         </main>
-        
       </div>
-      <FooterStepper/>
+      <FooterStepper />
     </MultistepProgressProvider>
-  )
+  );
 }
