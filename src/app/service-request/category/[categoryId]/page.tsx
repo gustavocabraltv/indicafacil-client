@@ -11,10 +11,10 @@ import { HeaderStepper } from '@/components/HeaderStepper'
 import { FooterStepper } from '@/components/FooterStepper'
 
 // Tipagem específica para os campos injetados via URL
-type InitialData = {
-  'service-description'?: string
-  'estimated-price'?: number
-}
+// type InitialData = {
+//   'service-description'?: string
+//   'estimated-price'?: number
+// }
 
 
 

@@ -13,7 +13,7 @@ import LocationSearch from '@/components/LocationSearch';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import TabServices2 from '@/components/TabServices2';
-import TabServices from '@/components/TabServices';
+// import TabServices from '@/components/TabServices';
 
 
 export default function Home4() {
