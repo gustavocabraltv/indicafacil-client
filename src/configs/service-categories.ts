@@ -2,7 +2,7 @@
 // configs/service-categories.ts
 import { MultistepConfig } from '@/types/multistep';
 import { pinturaConfig } from './categories/pintura';
-import {pintura_quick} from './categories/quick/pintura-quick'
+// import {pintura_quick} from './categories/quick/pintura-quick'
 import { encanador_quick } from './categories/quick/encanador-quick'
 import { marido_de_aluguel_quick } from './categories/quick/marido-de-aluguel-quick'
 import { diarista_quick } from './categories/quick/diarista-quick'

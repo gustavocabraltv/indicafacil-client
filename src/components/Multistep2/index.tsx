@@ -1,7 +1,6 @@
 import { useId, useState } from "react"
 
 import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 
 type Item = {
@@ -24,13 +23,17 @@ export default function Multistep2() {
   // múltiplas seleções
   const [selected, setSelected] = useState<Set<string>>(new Set(["2"]))
 
-  const toggle = (v: string, next: boolean) => {
-    setSelected((prev) => {
-      const s = new Set(prev)
-      next ? s.add(v) : s.delete(v)
-      return s
-    })
-  }
+const toggle = (v: string, next: boolean) => {
+  setSelected((prev) => {
+    const s = new Set(prev)
+    if (next) {
+      s.add(v)
+    } else {
+      s.delete(v)
+    }
+    return s
+  })
+}
 
   return (
     <fieldset className="space-y-4">
