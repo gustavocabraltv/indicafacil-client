@@ -1,45 +1,44 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Test from "@/components/Test";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Test from '@/components/Test';
 
 // 🔗 Catálogo central de rotas sugeridas (nome + url)
 // Edite livremente os hrefs conforme sua IA de rotas.
 const SUGGESTIONS = [
-  { label: "Pintor", href: "/service-request/category/pintura" },
-  { label: "Pedreiro", href: "/service-request/category/pedreiro" },
+  { label: 'Pintor', href: '/service-request/category/pintura' },
+  { label: 'Pedreiro', href: '/service-request/category/pedreiro' },
   {
-    label: "Marido de Aluguel",
-    href: "/service-request/category/marido-de-aluguel",
+    label: 'Marido de Aluguel',
+    href: '/service-request/category/marido-de-aluguel',
   },
-  { label: "Encanador", href: "/service-request/category/encanador" },
+  { label: 'Encanador', href: '/service-request/category/encanador' },
   {
-    label: "Diarista",
-    href: "/service-request/category/diarista",
+    label: 'Diarista',
+    href: '/service-request/category/diarista',
   },
-  { label: "Limpeza", href: "/service-request/category/diarista" },
+  { label: 'Limpeza', href: '/service-request/category/diarista' },
 ];
 
 // ⚡ Atalhos com controle de URL independente
 const SHORTCUTS = [
-  { label: "Pintor", href: "/service-request/category/pintura" },
-  { label: "Pedreiro", href: "/service-request/category/pedreiro" },
-  { label: "Encanador", href: "/service-request/category/encanador" },
-  { label: "Diarista", href: "/service-request/category/diarista" },
+  { label: 'Pintor', href: '/service-request/category/pintura' },
+  { label: 'Pedreiro', href: '/service-request/category/pedreiro' },
+  { label: 'Encanador', href: '/service-request/category/encanador' },
+  { label: 'Diarista', href: '/service-request/category/diarista' },
   {
-    label: "Marido de aluguel",
-    href: "/service-request/category/marido-de-aluguel",
+    label: 'Marido de aluguel',
+    href: '/service-request/category/marido-de-aluguel',
   },
 ];
 
 const HomePage: React.FC = () => {
   const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-  const [filteredSuggestions, setFilteredSuggestions] =
-    useState<typeof SUGGESTIONS>(SUGGESTIONS);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<typeof SUGGESTIONS>(SUGGESTIONS);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   // Filtra sugestões com base no termo
@@ -66,8 +65,8 @@ const HomePage: React.FC = () => {
         setShowSuggestions(false);
       }
     };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   const handleInputFocus = () => {
@@ -80,21 +79,18 @@ const HomePage: React.FC = () => {
     router.push(href);
   };
 
-  const handleSuggestionClick = (suggestion: {
-    label: string;
-    href: string;
-  }) => {
+  const handleSuggestionClick = (suggestion: { label: string; href: string }) => {
     setSearchTerm(suggestion.label);
     goTo(suggestion.href);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       setShowSuggestions(false);
       (e.target as HTMLInputElement).blur();
       return;
     }
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       // 1) Se houver uma correspondência exata, vai nela
       const exact = SUGGESTIONS.find(
         (s) => s.label.toLowerCase() === searchTerm.toLowerCase().trim()
@@ -113,10 +109,10 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const handleShortcutClick = (shortcut: { label: string; href: string }) => {
-    setSearchTerm(shortcut.label);
-    goTo(shortcut.href);
-  };
+  // const handleShortcutClick = (shortcut: { label: string; href: string }) => {
+  //   setSearchTerm(shortcut.label);
+  //   goTo(shortcut.href);
+  // };
 
   return (
     <div className="min-h-screen bg-white">
@@ -126,13 +122,7 @@ const HomePage: React.FC = () => {
           <div className="max-w-6xl mx-auto w-full">
             <div className="px-4 py-4 flex justify-between items-center">
               <Link href="/">
-                <Image
-                  src="/logo.svg"
-                  alt="Logo"
-                  className="h-8"
-                  width={190}
-                  height={50}
-                />
+                <Image src="/logo.svg" alt="Logo" className="h-8" width={190} height={50} />
               </Link>
               <Link href="/login" className="text-gray-700">
                 Entrar
@@ -169,44 +159,29 @@ const HomePage: React.FC = () => {
                   onKeyDown={handleKeyDown}
                   className="w-full h-[50px] pl-4 border-none outline-none text-base text-black"
                   aria-autocomplete="list"
-                  aria-expanded={showSuggestions}
                   aria-controls="suggestion-listbox"
                 />
                 <button
                   onClick={() => {
                     // comportamento igual ao Enter
                     const exact = SUGGESTIONS.find(
-                      (s) =>
-                        s.label.toLowerCase() ===
-                        searchTerm.toLowerCase().trim()
+                      (s) => s.label.toLowerCase() === searchTerm.toLowerCase().trim()
                     );
                     if (exact) return goTo(exact.href);
-                    if (filteredSuggestions.length > 0)
-                      return goTo(filteredSuggestions[0].href);
-                    router.push(
-                      `/buscar?q=${encodeURIComponent(searchTerm.trim())}`
-                    );
+                    if (filteredSuggestions.length > 0) return goTo(filteredSuggestions[0].href);
+                    router.push(`/buscar?q=${encodeURIComponent(searchTerm.trim())}`);
                   }}
                   className="flex w-[50px] h-[50px] rounded-full items-center justify-center aspect-square"
                   aria-label="Buscar"
                 >
-                  <Image
-                    src="/search-icon.svg"
-                    alt="Search"
-                    width={32}
-                    height={32}
-                  />
+                  <Image src="/search-icon.svg" alt="Search" width={32} height={32} />
                 </button>
               </div>
 
               {/* Suggestion Box */}
               {showSuggestions && (
                 <div className="overflow-hidden rounded-[18px] mt-3 border border-gray-400 bg-white shadow-[0px_4px_32px_0px_rgba(32,51,86,0.12)] absolute left-4 right-4">
-                  <ul
-                    id="suggestion-listbox"
-                    role="listbox"
-                    aria-label="Sugestões"
-                  >
+                  <ul id="suggestion-listbox" role="listbox" aria-label="Sugestões">
                     {filteredSuggestions.map((suggestion, index) => (
                       <li
                         key={suggestion.label + index}

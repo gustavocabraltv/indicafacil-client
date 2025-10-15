@@ -3,16 +3,16 @@ import Image from 'next/image';
 import Wrapper from "@/components/Wrapper";
 
 // Fora do componente
-const suggestions = [
-  "Pintor",
-  "Pedreiro", 
-  "Marido de Aluguel",
-  "Encanador",
-  "Truck Assisted Help Moving",
-  "Help Moving",
-  "Cleaning",
-  "Door, Cabinet, & Furniture Repair"
-];
+// const suggestions = [
+//   "Pintor",
+//   "Pedreiro", 
+//   "Marido de Aluguel",
+//   "Encanador",
+//   "Truck Assisted Help Moving",
+//   "Help Moving",
+//   "Cleaning",
+//   "Door, Cabinet, & Furniture Repair"
+// ];
 
 export default function Cta({ scroll = 0 }) {
     const [isVisible, setIsVisible] = useState(false);

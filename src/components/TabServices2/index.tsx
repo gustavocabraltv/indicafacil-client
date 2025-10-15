@@ -88,7 +88,7 @@ const CATEGORIES = [
 
 export default function TabServices() {
     const [active, setActive] = useState(CATEGORIES[0].id);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [_activeIndex, setActiveIndex] = useState(0);
     const baseId = useId();
     const swiperRef = useRef<SwiperType | null>(null);
 

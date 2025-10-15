@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import Search from "@/components/Search";
-import SearchFull from "@/components/SearchFull";
-import Shortcut from "@/components/TabServices";
+// import { useState } from 'react';
+// import Search from "@/components/Search";
+// import SearchFull from "@/components/SearchFull";
+// import Shortcut from "@/components/TabServices";
 import Wrapper from "@/components/Wrapper";
 import Image from 'next/image'
 import Banner from '@/components/Banner';

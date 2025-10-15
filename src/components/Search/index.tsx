@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import Wrapper from '../Wrapper';
 
 type SearchProps = {
   onOpen?: () => void;

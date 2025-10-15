@@ -5,7 +5,6 @@ import { useMultistepProgress } from '@/contexts/MultistepProgressContext';
 
 import {
     Stepper,
-    StepperDescription,
     StepperIndicator,
     StepperItem,
     StepperSeparator,
@@ -29,7 +28,7 @@ const steps = [
 ]
 
 export function HeaderStepper() {
-    const { currentStep, totalSteps, stepTitle } = useMultistepProgress();
+    const { currentStep, totalSteps } = useMultistepProgress();
 
     // Não renderizar se não há dados de progresso
     if (totalSteps === 0) {
@@ -47,7 +46,7 @@ export function HeaderStepper() {
     };
 
     const stepperValue = getStepperValue();
-    const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
+    // const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
 
     return (
         <div className='bg-white h-24 w-full px-8 py-4 shadow-sm border-b sticky top-0 z-50'>

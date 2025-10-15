@@ -1,4 +1,4 @@
-// components/DynamicMultistep.tsx - COM VALIDAÇÃO VISUAL
+// components/DynamicMultistep.tsx - COM VALIDAÇÃO VISUAL (ajustes de lint aplicados)
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -59,22 +59,24 @@ export function DynamicMultistep({
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === visibleSteps.length - 1;
 
+  // ✅ Corrigido: deps estáveis usando propriedades do objeto
   useEffect(() => {
-    if (visibleSteps.length > 0 && currentStepConfig) {
+    if (visibleSteps.length > 0 && currentStepConfig?.id) {
       updateProgress(
         currentStepIndex,
         visibleSteps.length,
-        currentStepConfig.title
+        currentStepConfig?.title || ""
       );
     }
   }, [
     currentStepIndex,
     visibleSteps.length,
+    currentStepConfig?.id,
     currentStepConfig?.title,
     updateProgress,
   ]);
 
-  // ✅ ADICIONADO: Validação em tempo real
+  // ✅ Validação em tempo real (mantida)
   const isCurrentStepValid = useMemo(() => {
     if (!currentStepConfig || currentStepConfig.type === "loading") {
       return true;
@@ -114,6 +116,7 @@ export function DynamicMultistep({
   };
 
   const handleFieldChange = (fieldId: string, value: string | string[]) => {
+    if (!currentStepConfig?.id) return;
     setFormData((prev) => ({
       ...prev,
       [currentStepConfig.id]: {
@@ -123,30 +126,9 @@ export function DynamicMultistep({
     }));
   };
 
-  const validateStep = () => {
-    if (currentStepConfig.type === "loading") {
-      return true;
-    }
+  // ❌ Removido: validateStep não era usado (resolvido o warning)
 
-    const stepData = formData[currentStepConfig.id] || {};
-
-    for (const field of currentStepConfig.fields) {
-      if (field.required && !stepData[field.id]) {
-        return false;
-      }
-
-      if (field.type === "checkbox" && field.required) {
-        const values = stepData[field.id] as string[];
-        if (!values || values.length === 0) {
-          return false;
-        }
-      }
-    }
-
-    return true;
-  };
-
-  // ✅ MODIFICADO: Removido alert, usa validação visual
+  // ✅ Usa validação visual
   const handleNext = async () => {
     if (!isCurrentStepValid) {
       return;
@@ -218,8 +200,9 @@ export function DynamicMultistep({
 
   const getFieldValue = (
     fieldId: string,
-    stepId: string = currentStepConfig.id
+    stepId: string = currentStepConfig?.id || ""
   ) => {
+    if (!stepId) return "";
     const currentValue = formData[stepId]?.[fieldId];
 
     if (
@@ -389,7 +372,7 @@ export function DynamicMultistep({
     return true;
   };
 
-  // ✅ MODIFICADO: Botões com validação
+  // ✅ Botões com validação
   const renderStepButtons = (
     stepConfig: typeof currentStepConfig,
     isPrevious = false

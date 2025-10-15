@@ -10,6 +10,14 @@ import { MultistepProgressProvider } from '@/contexts/MultistepProgressContext'
 import { HeaderStepper } from '@/components/HeaderStepper'
 import { FooterStepper } from '@/components/FooterStepper'
 
+// Tipagem específica para os campos injetados via URL
+type InitialData = {
+  'service-description'?: string
+  'estimated-price'?: number
+}
+
+
+
 export default function CategoryPage() {
   const router = useRouter()
   const params = useParams<{ categoryId: string }>()
@@ -83,9 +91,9 @@ export default function CategoryPage() {
     }
   }
 
-  const handleBack = () => {
-    router.push('/service-request')
-  }
+  // const handleBack = () => {
+  //   router.push('/service-request')
+  // }
 
   return (
     <MultistepProgressProvider>
