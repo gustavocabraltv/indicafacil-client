@@ -4,8 +4,22 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { RequestCard } from "@/components/RequestCard";
 
+type FormDataValue = string | number | boolean | string[] | null | undefined;
+type FormFieldsData = Record<string, FormDataValue>;
+type FormData = Record<string, FormFieldsData>;
+
+type Submission = {
+  id: string;
+  created_at: string;
+  category_id: string | null;
+  user_name?: string | null;
+  user_phone?: string | null;
+  user_email?: string | null;
+  form_data?: FormData | string | null;
+};
+
 export function RequestGrid() {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,7 +32,7 @@ export function RequestGrid() {
       if (error) {
         console.error(error);
       } else {
-        setData(data || []);
+        setData((data as Submission[]) || []);
       }
       setLoading(false);
     };

@@ -1,6 +1,10 @@
 import { useMemo } from "react";
 import Image from "next/image";
 
+type FormDataValue = string | number | boolean | string[] | null | undefined;
+type FormFieldsData = Record<string, FormDataValue>;
+type FormData = Record<string, FormFieldsData>;
+
 type Submission = {
     id: string;
     created_at: string;
@@ -8,8 +12,10 @@ type Submission = {
     user_name?: string | null;
     user_phone?: string | null;
     user_email?: string | null;
-    form_data?: Record<string, any> | string | null;
+    form_data?: FormData | string | null;
 };
+
+type UrgencyType = 'urgente' | '1-semana' | '15-dias' | 'sem-data';
 
 function formatCategory(category: string | null) {
     if (!category) return "Sem categoria";
@@ -24,9 +30,9 @@ export function RequestCard({ submission }: { submission: Submission }) {
         if (!raw) return {};
         if (typeof raw === "string") {
             try {
-                return JSON.parse(raw);
+                return JSON.parse(raw) as FormData;
             } catch {
-                return { _raw: raw };
+                return { _raw: { value: raw } };
             }
         }
         return raw;
@@ -41,12 +47,12 @@ export function RequestCard({ submission }: { submission: Submission }) {
     // const date = new Date(submission.created_at);
 
     // Acessando campos específicos
-    const urgency = formData?.timing?.urgency;
+    const urgency = formData?.timing?.urgency as UrgencyType | undefined;
     // const paintLocation = formData?.["paint-type"]?.["paint-location"];
     // const userName = formData?.["contact-data"]?.name;
 
     // Função para obter as cores baseado na urgência
-    const getUrgencyStyles = (urgency: string | undefined) => {
+    const getUrgencyStyles = (urgency: UrgencyType | undefined) => {
         switch (urgency) {
             case 'urgente':
                 return 'bg-red-100 text-red-700';
