@@ -32,18 +32,18 @@ export function RequestCard({ submission }: { submission: Submission }) {
         return raw;
     }, [submission.form_data]);
 
-    const contact = [
-        submission.user_name && `Nome: ${submission.user_name}`,
-        submission.user_phone && `Telefone: ${submission.user_phone}`,
-        submission.user_email && `Email: ${submission.user_email}`,
-    ].filter(Boolean).join(" · ");
+    // const contact = [
+    //     submission.user_name && `Nome: ${submission.user_name}`,
+    //     submission.user_phone && `Telefone: ${submission.user_phone}`,
+    //     submission.user_email && `Email: ${submission.user_email}`,
+    // ].filter(Boolean).join(" · ");
 
-    const date = new Date(submission.created_at);
+    // const date = new Date(submission.created_at);
 
     // Acessando campos específicos
     const urgency = formData?.timing?.urgency;
-    const paintLocation = formData?.["paint-type"]?.["paint-location"];
-    const userName = formData?.["contact-data"]?.name;
+    // const paintLocation = formData?.["paint-type"]?.["paint-location"];
+    // const userName = formData?.["contact-data"]?.name;
 
     // Função para obter as cores baseado na urgência
     const getUrgencyStyles = (urgency: string | undefined) => {

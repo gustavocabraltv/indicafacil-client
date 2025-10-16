@@ -3,6 +3,10 @@
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
 
+type FormDataValue = string | number | boolean | string[] | null | undefined;
+type FormFieldsData = Record<string, FormDataValue>;
+type FormData = Record<string, FormFieldsData>;
+
 type Submission = {
   id: string;
   created_at: string;
@@ -10,7 +14,7 @@ type Submission = {
   user_name: string | null;
   user_phone: string | null;
   user_email: string | null;
-  form_data: Record<string, any> | null;
+  form_data: FormData | null;
 };
 
 export function SubmissionsGrid() {
@@ -133,7 +137,7 @@ function SubmissionCard({ sub }: { sub: Submission }) {
   );
 }
 
-function FormDataList({ formData }: { formData: Record<string, any> }) {
+function FormDataList({ formData }: { formData: FormData }) {
   const entries = Object.entries(formData);
 
   if (entries.length === 0) {
@@ -169,7 +173,7 @@ function FormDataList({ formData }: { formData: Record<string, any> }) {
   );
 }
 
-function formatValue(v: any) {
+function formatValue(v: FormDataValue) {
   if (Array.isArray(v)) return v.join(", ");
   if (typeof v === "object" && v !== null) return JSON.stringify(v);
   if (v === "" || v === null || v === undefined) return "—";
